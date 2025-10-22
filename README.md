@@ -14,11 +14,30 @@ JobBuddy helps job seekers automate and optimize their job application process t
 
 ## Technology Stack
 
-- **Frontend**: React with TypeScript
-- **Backend**: Node.js/Express
-- **Database**: PostgreSQL
+- **Frontend**: React with TypeScript, Material UI
+- **Backend**: Node.js/Express, TypeScript
+- **Database**: PostgreSQL with Sequelize ORM
 - **Automation**: n8n workflows
 - **AI Integration**: OpenAI for content generation and analysis
+
+## Current Status
+
+🚧 **Phase 1: Foundation** - In Progress
+
+### Completed:
+- ✅ GitHub repository setup
+- ✅ Project structure configuration
+- ✅ CI/CD pipeline with GitHub Actions
+- ✅ Basic frontend components (Layout, Header, Footer)
+- ✅ Authentication context and protected routes
+- ✅ Backend Express server with security middleware
+- ✅ Database models (User, CV, JobPreference, Job, Application)
+- ✅ Authentication API endpoints
+
+### In Progress:
+- 🔄 Frontend pages implementation
+- 🔄 CV upload and management
+- 🔄 n8n integration
 
 ## Development Roadmap
 
@@ -52,10 +71,6 @@ JobBuddy helps job seekers automate and optimize their job application process t
 - Documentation
 - Launch preparation
 
-## Current Status
-
-🚧 **Phase 1: Foundation** - Setting up project infrastructure
-
 ## Getting Started
 
 ### Prerequisites
@@ -72,11 +87,26 @@ git clone https://github.com/dannythehat/jobbuddy.git
 # Navigate to project directory
 cd jobbuddy
 
-# Install dependencies
+# Install backend dependencies
+cd backend
 npm install
 
-# Start development server
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+
+# Start development servers
+# Terminal 1 (Backend)
+cd backend
 npm run dev
+
+# Terminal 2 (Frontend)
+cd frontend
+npm start
 ```
 
 ## Project Structure
@@ -84,7 +114,21 @@ npm run dev
 ```
 jobbuddy/
 ├── frontend/           # React frontend application
+│   ├── public/         # Static files
+│   ├── src/            # Source code
+│   │   ├── components/ # Reusable components
+│   │   ├── contexts/   # React contexts
+│   │   ├── pages/      # Page components
+│   │   ├── styles/     # Global styles
+│   │   └── ...
 ├── backend/            # Node.js/Express backend
+│   ├── src/            # Source code
+│   │   ├── config/     # Configuration files
+│   │   ├── controllers/# Request handlers
+│   │   ├── middleware/ # Express middleware
+│   │   ├── models/     # Database models
+│   │   ├── routes/     # API routes
+│   │   └── ...
 ├── n8n-workflows/      # n8n workflow templates
 ├── docs/               # Documentation
 └── scripts/            # Utility scripts
