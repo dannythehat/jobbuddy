@@ -1,0 +1,137 @@
+{
+  "name": "Job Scraper - LinkedIn",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.linkedin.com/jobs/search/",
+        "options": {
+          "waitUntil": "networkidle"
+        }
+      },
+      "id": "http-request",
+      "name": "Scrape LinkedIn Jobs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse job listings from LinkedIn HTML\nconst jobs = [];\nconst html = $input.first().json.data;\n\n// This is a simplified parser - actual implementation would be more complex\n// and would need to handle LinkedIn's dynamic content\n\n// Mock job data for demonstration\nconst mockJobs = [\n  {\n    title: \"Software Engineer\",\n    company: \"TechCorp\",\n    location: \"San Francisco, CA\",\n    description: \"We are looking for a talented software engineer...\",\n    url: \"https://linkedin.com/jobs/view/123456\",\n    salary: \"$120,000 - $150,000\",\n    jobType: \"Full-time\",\n    remote: false,\n    skills: [\"JavaScript\", \"React\", \"Node.js\"],\n    postedDate: new Date().toISOString()\n  }\n];\n\nreturn mockJobs.map(job => ({ json: job }));"
+      },
+      "id": "code-parser",
+      "name": "Parse Job Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": "jobs",
+        "columns": "title, company, location, description, url, salary, job_type, remote, skills, posted_date, source, is_active",
+        "additionalFields": {
+          "mode": "independently"
+        }
+      },
+      "id": "postgres-insert",
+      "name": "Save Jobs to Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [840, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "messageType": "multipleMessages",
+          "multipleMessages": [
+            {
+              "role": "system",
+              "message": "You are a job matching assistant. Calculate a match score (0-100) for this job based on user preferences. Consider skills, location, salary, and job type."
+            },
+            {
+              "role": "user",
+              "message": "=Job: {{ $json.title }} at {{ $json.company }}\\nSkills: {{ $json.skills.join(', ') }}\\nLocation: {{ $json.location }}\\nSalary: {{ $json.salary }}\\n\\nUser preferences will be loaded from database."
+            }
+          ]
+        }
+      },
+      "id": "openai-matcher",
+      "name": "Calculate Match Score",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1040, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Scrape LinkedIn Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape LinkedIn Jobs": {
+      "main": [
+        [
+          {
+            "node": "Parse Job Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Job Data": {
+      "main": [
+        [
+          {
+            "node": "Save Jobs to Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Jobs to Database": {
+      "main": [
+        [
+          {
+            "node": "Calculate Match Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1",
+  "meta": {
+    "instanceId": "jobbuddy-job-scraper-linkedin"
+  },
+  "id": "job-scraper-linkedin",
+  "tags": []
+}
