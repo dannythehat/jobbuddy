@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import { Op } from 'sequelize';
+import sequelize from '../config/database';
 import { Job } from '../models/Job';
 import { calculateJobMatches } from '../services/jobMatcher';
 import { JobPreference } from '../models/JobPreference';
