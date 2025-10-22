@@ -11,6 +11,7 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import cvRoutes from './routes/cvRoutes';
 import jobPreferenceRoutes from './routes/jobPreferenceRoutes';
+import jobRoutes from './routes/jobRoutes';
 
 // Create Express app
 const app = express();
@@ -37,7 +38,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cvs', cvRoutes);
 app.use('/api/preferences', jobPreferenceRoutes);
-// app.use('/api/jobs', jobRoutes);
+app.use('/api/jobs', jobRoutes);
 // app.use('/api/applications', applicationRoutes);
 
 // Basic route for testing
