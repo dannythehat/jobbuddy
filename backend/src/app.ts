@@ -6,6 +6,9 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 
+// Import routes
+import authRoutes from './routes/authRoutes';
+
 // Create Express app
 const app = express();
 
@@ -26,8 +29,8 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Routes (to be implemented)
-// app.use('/api/auth', authRoutes);
+// Routes
+app.use('/api/auth', authRoutes);
 // app.use('/api/users', userRoutes);
 // app.use('/api/cvs', cvRoutes);
 // app.use('/api/preferences', preferenceRoutes);
