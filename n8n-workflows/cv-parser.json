@@ -1,0 +1,110 @@
+{
+  "name": "CV Parser Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "cv-parser"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cv-parser",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1040, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "messageType": "multipleMessages",
+          "multipleMessages": [
+            {
+              "role": "system",
+              "message": "You are a CV parser. Extract structured information from the provided CV text and return it as JSON with the following fields: name, email, phone, skills (array), experience (array of objects with company, position, duration), education (array of objects with institution, degree, year)."
+            },
+            {
+              "role": "user",
+              "message": "=Please parse this CV text: {{ $json.cvText }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "id": "openai-parser",
+      "name": "OpenAI CV Parser",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE cvs SET parsed_data = $1, skills = $2 WHERE id = $3",
+        "additionalFields": {
+          "mode": "independently"
+        }
+      },
+      "id": "postgres-update",
+      "name": "Update CV in Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [840, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "OpenAI CV Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI CV Parser": {
+      "main": [
+        [
+          {
+            "node": "Update CV in Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update CV in Database": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1",
+  "meta": {
+    "instanceId": "jobbuddy-cv-parser"
+  },
+  "id": "cv-parser-workflow",
+  "tags": []
+}
