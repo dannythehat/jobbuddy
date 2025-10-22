@@ -10,6 +10,7 @@ import path from 'path';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import cvRoutes from './routes/cvRoutes';
+import jobPreferenceRoutes from './routes/jobPreferenceRoutes';
 
 // Create Express app
 const app = express();
@@ -35,7 +36,7 @@ app.use('/api', limiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cvs', cvRoutes);
-// app.use('/api/preferences', preferenceRoutes);
+app.use('/api/preferences', jobPreferenceRoutes);
 // app.use('/api/jobs', jobRoutes);
 // app.use('/api/applications', applicationRoutes);
 
