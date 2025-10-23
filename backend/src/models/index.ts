@@ -3,6 +3,7 @@ import { CV } from './CV';
 import { JobPreference } from './JobPreference';
 import { Job } from './Job';
 import { Application } from './Application';
+import { Certificate } from './Certificate';
 
 // Export all models
 export {
@@ -11,6 +12,7 @@ export {
   JobPreference,
   Job,
   Application,
+  Certificate,
 };
 
 // Note: Associations are defined in each model file
