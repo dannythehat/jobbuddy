@@ -4,6 +4,7 @@ import { JobPreference } from './JobPreference';
 import { Job } from './Job';
 import { Application } from './Application';
 import { Certificate } from './Certificate';
+import { Response } from './Response';
 
 // Export all models
 export {
@@ -13,6 +14,7 @@ export {
   Job,
   Application,
   Certificate,
+  Response,
 };
 
 // Note: Associations are defined in each model file
