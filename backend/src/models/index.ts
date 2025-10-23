@@ -5,6 +5,7 @@ import { Job } from './Job';
 import { Application } from './Application';
 import { Certificate } from './Certificate';
 import { Response } from './Response';
+import { Interview } from './Interview';
 
 // Export all models
 export {
@@ -15,6 +16,7 @@ export {
   Application,
   Certificate,
   Response,
+  Interview,
 };
 
 // Note: Associations are defined in each model file
