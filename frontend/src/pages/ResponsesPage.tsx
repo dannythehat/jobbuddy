@@ -47,8 +47,10 @@ import {
   MonetizationOn as MonetizationOnIcon,
   Event as EventIcon,
   Info as InfoIcon,
+  CalendarToday as CalendarTodayIcon,
 } from '@mui/icons-material';
 import { format } from 'date-fns';
+import InterviewAlert from '../components/InterviewAlert';
 
 interface Response {
   id: string;
@@ -109,6 +111,8 @@ const ResponsesPage: React.FC = () => {
   const [processing, setProcessing] = useState(false);
   const [selectedResponse, setSelectedResponse] = useState<Response | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [interviewAlertOpen, setInterviewAlertOpen] = useState(false);
+  const [interviewResponse, setInterviewResponse] = useState<Response | null>(null);
   
   // Filters
   const [filters, setFilters] = useState({
@@ -232,6 +236,50 @@ const ResponsesPage: React.FC = () => {
     } catch (error) {
       console.error('Error updating response:', error);
     }
+  };
+
+  const handleScheduleInterview = async (action: 'accept' | 'decline' | 'reschedule', options?: any) => {
+    if (!interviewResponse) return;
+
+    try {
+      const response = await fetch('/api/interviews/schedule', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          responseId: interviewResponse.id,
+          userAction: action,
+          ...options,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Show success message
+        console.log('Interview scheduled successfully:', data);
+        
+        // Refresh responses
+        await fetchResponses();
+        await fetchAnalytics();
+        
+        // Close the alert
+        setInterviewAlertOpen(false);
+        setInterviewResponse(null);
+      } else {
+        const errorData = await response.json();
+        console.error('Error scheduling interview:', errorData);
+      }
+    } catch (error) {
+      console.error('Error scheduling interview:', error);
+    }
+  };
+
+  const handleInterviewInvite = (response: Response) => {
+    setInterviewResponse(response);
+    setInterviewAlertOpen(true);
   };
 
   const getClassificationIcon = (classification: string) => {
@@ -529,6 +577,21 @@ const ResponsesPage: React.FC = () => {
                           />
                         )}
                         
+                        {response.classification === 'interview_invite' && response.actionRequired && (
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            startIcon={<CalendarTodayIcon />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleInterviewInvite(response);
+                            }}
+                          >
+                            Schedule
+                          </Button>
+                        )}
+                        
                         <Button
                           size="small"
                           onClick={(e) => {
@@ -675,6 +738,19 @@ const ResponsesPage: React.FC = () => {
             </DialogContent>
             
             <DialogActions>
+              {selectedResponse.classification === 'interview_invite' && selectedResponse.actionRequired && (
+                <Button
+                  onClick={() => {
+                    setDetailsOpen(false);
+                    handleInterviewInvite(selectedResponse);
+                  }}
+                  variant="contained"
+                  color="success"
+                  startIcon={<CalendarTodayIcon />}
+                >
+                  Schedule Interview
+                </Button>
+              )}
               <Button
                 onClick={() => handleMarkProcessed(selectedResponse.id, !selectedResponse.processed)}
                 color={selectedResponse.processed ? 'warning' : 'success'}
@@ -691,6 +767,17 @@ const ResponsesPage: React.FC = () => {
           </>
         )}
       </Dialog>
+
+      {/* Interview Alert Dialog */}
+      <InterviewAlert
+        open={interviewAlertOpen}
+        onClose={() => {
+          setInterviewAlertOpen(false);
+          setInterviewResponse(null);
+        }}
+        response={interviewResponse!}
+        onSchedule={handleScheduleInterview}
+      />
 
       {/* Empty State */}
       {!loading && responses.length === 0 && (
