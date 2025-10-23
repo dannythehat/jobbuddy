@@ -13,6 +13,7 @@ import cvRoutes from './routes/cvRoutes';
 import jobPreferenceRoutes from './routes/jobPreferenceRoutes';
 import jobRoutes from './routes/jobRoutes';
 import applicationRoutes from './routes/applications';
+import certificateRoutes from './routes/certificates';
 
 // Create Express app
 const app = express();
@@ -41,6 +42,7 @@ app.use('/api/cvs', cvRoutes);
 app.use('/api/preferences', jobPreferenceRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
+app.use('/api/certificates', certificateRoutes);
 
 // Basic route for testing
 app.get('/api/health', (req: Request, res: Response) => {
