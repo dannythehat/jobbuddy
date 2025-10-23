@@ -13,6 +13,9 @@ import JobsPage from './pages/JobsPage';
 import ApplicationsPage from './pages/ApplicationsPage';
 import ResponsesPage from './pages/ResponsesPage';
 import InterviewsPage from './pages/InterviewsPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import ABTestingPage from './pages/ABTestingPage';
+import IntegrationsPage from './pages/IntegrationsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -127,6 +130,21 @@ const App: React.FC = () => {
             <Route path="interviews" element={
               <ProtectedRoute>
                 <InterviewsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="analytics" element={
+              <ProtectedRoute>
+                <AnalyticsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="ab-testing" element={
+              <ProtectedRoute>
+                <ABTestingPage />
+              </ProtectedRoute>
+            } />
+            <Route path="integrations" element={
+              <ProtectedRoute>
+                <IntegrationsPage />
               </ProtectedRoute>
             } />
             
