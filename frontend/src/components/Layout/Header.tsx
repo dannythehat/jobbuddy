@@ -39,6 +39,9 @@ const Header: React.FC = () => {
         { title: 'Applications', path: '/applications' },
         { title: 'Responses', path: '/responses' },
         { title: 'Interviews', path: '/interviews' },
+        { title: 'Analytics', path: '/analytics' },
+        { title: 'A/B Testing', path: '/ab-testing' },
+        { title: 'Integrations', path: '/integrations' },
         { title: 'CVs', path: '/cvs' },
       ]
     : [
