@@ -16,6 +16,9 @@ import applicationRoutes from './routes/applications';
 import certificateRoutes from './routes/certificates';
 import responseRoutes from './routes/responseRoutes';
 import interviewRoutes from './routes/interviewRoutes';
+import analyticsRoutes from './routes/analytics';
+import abTestingRoutes from './routes/abTesting';
+import integrationRoutes from './routes/integrations';
 
 // Create Express app
 const app = express();
@@ -47,6 +50,9 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/responses', responseRoutes);
 app.use('/api/interviews', interviewRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/ab-tests', abTestingRoutes);
+app.use('/api/integrations', integrationRoutes);
 
 // Basic route for testing
 app.get('/api/health', (req: Request, res: Response) => {
