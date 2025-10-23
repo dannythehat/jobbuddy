@@ -6,8 +6,9 @@ import { Application } from './Application';
 import { Certificate } from './Certificate';
 import { Response } from './Response';
 import { Interview } from './Interview';
+import { ABTest } from './ABTest';
+import { ABTestParticipation } from './ABTestParticipation';
 
-// Export all models
 export {
   User,
   CV,
@@ -17,7 +18,6 @@ export {
   Certificate,
   Response,
   Interview,
+  ABTest,
+  ABTestParticipation
 };
-
-// Note: Associations are defined in each model file
-// This index file is for easy importing of all models
