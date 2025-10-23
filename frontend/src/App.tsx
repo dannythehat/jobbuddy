@@ -11,6 +11,7 @@ import CVsPage from './pages/CVsPage';
 import PreferencesPage from './pages/PreferencesPage';
 import JobsPage from './pages/JobsPage';
 import ApplicationsPage from './pages/ApplicationsPage';
+import ResponsesPage from './pages/ResponsesPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -115,6 +116,11 @@ const App: React.FC = () => {
             <Route path="applications" element={
               <ProtectedRoute>
                 <ApplicationsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="responses" element={
+              <ProtectedRoute>
+                <ResponsesPage />
               </ProtectedRoute>
             } />
             
