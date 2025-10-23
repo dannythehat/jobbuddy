@@ -16,6 +16,7 @@ import {
   Schedule as ScheduleIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import IntegrationSetup from '../components/IntegrationSetup';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -71,6 +72,9 @@ const DashboardPage: React.FC = () => {
           Here's an overview of your job search progress.
         </Typography>
       </Box>
+
+      {/* Integration Setup Card */}
+      <IntegrationSetup showOnlyIfIncomplete={true} />
 
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
