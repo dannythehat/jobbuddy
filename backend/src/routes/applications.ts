@@ -8,15 +8,24 @@ const router = express.Router();
 router.use(authenticateToken);
 
 /**
- * @route GET /api/applications
- * @desc Get all applications for the authenticated user
+ * @route GET /api/applications/check-duplicate
+ * @desc Check for duplicate applications
  * @access Private
+ * @query jobId, cvId (optional)
+ */
+router.get('/check-duplicate', ApplicationController.checkDuplicateApplication);
+
+/**
+ * @route GET /api/applications
+ * @desc Get all applications for the authenticated user with filtering and pagination
+ * @access Private
+ * @query status, applicationMethod, dateFrom, dateTo, search, sortBy, sortOrder, page, limit
  */
 router.get('/', ApplicationController.getApplications);
 
 /**
  * @route GET /api/applications/stats
- * @desc Get application statistics for the user
+ * @desc Get enhanced application statistics for the user
  * @access Private
  */
 router.get('/stats', ApplicationController.getApplicationStats);
@@ -29,10 +38,26 @@ router.get('/stats', ApplicationController.getApplicationStats);
 router.get('/:id', ApplicationController.getApplication);
 
 /**
- * @route POST /api/applications
- * @desc Create a new application (draft)
+ * @route GET /api/applications/:id/timeline
+ * @desc Get application timeline with status changes and communications
  * @access Private
- * @body { jobId: string, cvId: string, notes?: string }
+ */
+router.get('/:id/timeline', ApplicationController.getApplicationTimeline);
+
+/**
+ * @route POST /api/applications
+ * @desc Create a new application (draft) with duplicate prevention
+ * @access Private
+ * @body { 
+ *   jobId: string, 
+ *   cvId: string, 
+ *   notes?: string,
+ *   applicationMethod?: string,
+ *   referralSource?: string,
+ *   jobBoardUrl?: string,
+ *   jobBoardId?: string,
+ *   allowDuplicate?: boolean
+ * }
  */
 router.post('/', ApplicationController.createApplication);
 
@@ -63,7 +88,7 @@ router.post('/generate-variations', ApplicationController.generateCoverLetterVar
 
 /**
  * @route PUT /api/applications/:id
- * @desc Update an application
+ * @desc Update an application with enhanced tracking
  * @access Private
  * @body { 
  *   status?: string,
@@ -74,10 +99,35 @@ router.post('/generate-variations', ApplicationController.generateCoverLetterVar
  *   responseType?: string,
  *   interviewDate?: Date,
  *   interviewNotes?: string,
- *   offerDetails?: object
+ *   offerDetails?: object,
+ *   applicationMethod?: string,
+ *   referralSource?: string,
+ *   followUpDates?: Date[],
+ *   rejectionReason?: string,
+ *   rejectionFeedback?: string,
+ *   salaryOffered?: number,
+ *   negotiationNotes?: string,
+ *   jobBoardUrl?: string,
+ *   jobBoardId?: string,
+ *   communications?: object[],
+ *   statusChangeNotes?: string
  * }
  */
 router.put('/:id', ApplicationController.updateApplication);
+
+/**
+ * @route POST /api/applications/:id/communication
+ * @desc Add communication to application
+ * @access Private
+ * @body { 
+ *   type: 'email' | 'phone' | 'meeting' | 'message',
+ *   direction: 'inbound' | 'outbound',
+ *   subject?: string,
+ *   summary: string,
+ *   date?: Date
+ * }
+ */
+router.post('/:id/communication', ApplicationController.addCommunication);
 
 /**
  * @route POST /api/applications/:id/optimize
