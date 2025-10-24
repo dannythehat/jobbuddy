@@ -1,6 +1,6 @@
 # Development Roadmap
 
-## 🎯 Current Status: Phase 5 COMPLETED - PRODUCTION READY! 🚀
+## 🎯 Current Status: Phase 6.1 IN PROGRESS - Natural Language Job Search 🔍
 
 ### ✅ Phase 1: Foundation (COMPLETED)
 - Project setup and repository configuration
@@ -92,6 +92,30 @@
 - Logging and error handling systems
 - Performance metrics and alerting
 
+### 🔄 Phase 6.1: Natural Language Job Search (IN PROGRESS)
+**Goal:** Enable users to search jobs using natural language queries
+
+**Current Implementation:**
+- 📝 Documentation and planning phase
+- 🏗️ Backend API structure design
+- 🎨 Frontend component planning
+- 🤖 AI query processing architecture
+
+**Features in Development:**
+- Natural language query parsing ("Find remote React jobs in London")
+- Intelligent filter translation (location, skills, salary, remote work)
+- Query suggestion and auto-completion
+- Search result relevance scoring
+- Query history and favorites
+- Smart search refinement suggestions
+
+**Technical Components:**
+- OpenAI integration for query understanding
+- Enhanced search API endpoints
+- Natural language processing utilities
+- Updated frontend search interface
+- Query analytics and optimization
+
 ## 🚀 PRODUCTION LAUNCH ACHIEVED! 
 
 ### 🎯 **JobBuddi is now PRODUCTION READY** with:
@@ -121,14 +145,19 @@
 - **🐳 Container-ready** deployment with health checks
 - **📈 Scalable architecture** with caching and optimization
 
-## 🚀 Future Enhancements (Post-Launch)
+## 🚀 Future Enhancements (Post-Phase 6)
 
-### Phase 6: Advanced AI Features
-- Natural language job search queries
-- AI-powered interview preparation
-- Personalized career path recommendations
-- Skill gap analysis with learning suggestions
-- Market trend analysis and alerts
+### Phase 6.2: Advanced AI Search Features
+- Semantic job matching with vector embeddings
+- AI-powered job recommendation engine
+- Contextual search with user history
+- Multi-language query support
+
+### Phase 6.3: AI Interview Preparation
+- AI-powered interview question generation
+- Mock interview simulation
+- Performance feedback and improvement suggestions
+- Industry-specific interview preparation
 
 ### Phase 7: Integrations & Ecosystem
 - LinkedIn integration for direct applications
@@ -152,9 +181,10 @@
 - **Phase 4.2:** Interview Automation ✅
 - **Phase 4.3:** Advanced Analytics ✅
 - **Phase 5:** Production Launch ✅ 🎉
+- **Phase 6.1:** Natural Language Search 🔄 (IN PROGRESS)
 
 ## 🚀 **JOBBUDDI IS LIVE AND PRODUCTION READY!**
 
 ---
 
-*Last Updated: October 2025 - PRODUCTION LAUNCH COMPLETE! 🎉*
+*Last Updated: October 2025 - Phase 6.1 Natural Language Search Development Started! 🔍*
