@@ -6,7 +6,7 @@
 *Your AI-Powered Career Assistant* 🤖
 
 [![Production Ready](https://img.shields.io/badge/Status-PRODUCTION%20READY-brightgreen)](docs/roadmap.md)
-[![Phase 5](https://img.shields.io/badge/Phase-5%20Complete-success)](docs/roadmap.md)
+[![Phase 6.1](https://img.shields.io/badge/Phase-6.1%20IN%20PROGRESS-orange)](docs/roadmap.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](package.json)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](docker-compose.prod.yml)
@@ -24,6 +24,7 @@ An intelligent job application automation platform that streamlines your entire 
 - 📧 **Response Monitoring** - Email classification & tracking
 - 📅 **Interview Automation** - Calendar integration & scheduling
 - 📊 **Advanced Analytics** - Comprehensive insights & visualizations
+- 🔍 **Natural Language Search** - Search jobs with plain English *(Phase 6.1 - In Development)*
 - 🔒 **Enterprise Security** - Rate limiting, validation, monitoring
 - ⚡ **High Performance** - Redis caching, optimization, scaling
 
@@ -58,6 +59,12 @@ npm run start
 - Docker containerization with full orchestration
 - Production monitoring with health checks and metrics
 - Complete CI/CD pipeline with automated deployment
+
+🔄 **Phase 6.1 IN PROGRESS - Natural Language Job Search**
+- AI-powered natural language query processing
+- Intelligent search with plain English commands
+- Enhanced user experience with conversational search
+- Smart filter translation and result optimization
 
 **Achievement:** Full production launch with enterprise infrastructure! 🚀
 
@@ -114,5 +121,5 @@ MIT License - see [LICENSE](LICENSE) file.
 ---
 
 <div align="center">
-<em>🎉 Production Ready - Built with ❤️ for job seekers everywhere 🎉</em>
+<em>🎉 Production Ready - Phase 6.1 Natural Language Search in Development 🔍</em>
 </div>
