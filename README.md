@@ -1,19 +1,18 @@
 <div align="center">
 
-![JobBuddi Logo](https://client-uploads.nyc3.digitaloceanspaces.com/images/731d7eb6-98fd-4f14-8af6-386d93ba0e57/2025-10-24T03-50-17-074Z-0b544258.jpg)
+![JobBuddy Logo](https://client-uploads.nyc3.digitaloceanspaces.com/images/731d7eb6-98fd-4f14-8af6-386d93ba0e57/2025-10-24T03-50-17-074Z-0b544258.jpg)
 
-# JobBuddi
+# JobBuddy
 *Your AI-Powered Career Assistant* 🤖
 
 [![Production Ready](https://img.shields.io/badge/Status-PRODUCTION%20READY-brightgreen)](docs/roadmap.md)
 [![Phase 6.1](https://img.shields.io/badge/Phase-6.1%20IN%20PROGRESS-orange)](docs/roadmap.md)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](package.json)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](backend/package.json)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](docker-compose.prod.yml)
 
 </div>
 
-## 🚀 What is JobBuddi?
+## 🚀 What is JobBuddy?
 
 An intelligent job application automation platform that streamlines your entire job search process with AI-powered assistance. **Now production-ready with enterprise-grade infrastructure!**
 
@@ -30,24 +29,45 @@ An intelligent job application automation platform that streamlines your entire 
 
 ## ⚡ Quick Start
 
+### Prerequisites
+- Node.js 18+
+- PostgreSQL
+- Redis
+- OpenAI API key
+
 ### Development Setup
 ```bash
 git clone https://github.com/dannythehat/jobbuddy.git
 cd jobbuddy
+
+# Make setup script executable and run
+chmod +x scripts/setup-dev.sh
 ./scripts/setup-dev.sh
+
+# Configure environment variables
+cp backend/.env.example backend/.env
+# Edit backend/.env with your database and API credentials
+
+# Initialize database
+node scripts/init-db.js
+
+# Start development servers
+# Terminal 1 - Backend
+cd backend && npm run dev
+
+# Terminal 2 - Frontend  
+cd frontend && npm start
 ```
 
 ### Production Deployment
 ```bash
-# Using Docker Compose
+# Using Docker Compose (Recommended)
 docker-compose -f docker-compose.prod.yml up -d
 
 # Manual deployment
 npm run build
 npm run start
 ```
-
-**Requirements:** Node.js 18+, PostgreSQL, Redis, OpenAI API key
 
 📖 **[Full Setup Guide](docs/setup.md)** | 🏗️ **[Architecture](docs/architecture.md)** | 🛣️ **[Roadmap](docs/roadmap.md)**
 
@@ -89,29 +109,29 @@ npm run start
 
 - 📖 **[Setup Guide](docs/setup.md)** - Installation & configuration
 - 🏗️ **[Architecture](docs/architecture.md)** - System design & structure  
-- 🔌 **[API Reference](docs/api.md)** - Complete endpoint documentation
 - ✨ **[Features](docs/features.md)** - Detailed feature breakdown
 - 🛣️ **[Roadmap](docs/roadmap.md)** - Development phases & progress
-- 🤝 **[Contributing](docs/contributing.md)** - How to contribute
 
-## 🚀 Deployment
+## 🚀 Deployment Options
 
-JobBuddi is production-ready with multiple deployment options:
+JobBuddy is production-ready with multiple deployment options:
 
 - **Docker Compose** - Complete stack with one command
-- **Kubernetes** - Scalable container orchestration
+- **Kubernetes** - Scalable container orchestration  
 - **Traditional** - Direct server deployment
 - **Cloud** - AWS, GCP, Azure compatible
 
-See [deployment documentation](docs/deployment.md) for detailed instructions.
+See the [docker-compose.prod.yml](docker-compose.prod.yml) file for production configuration.
 
 ## 🤝 Contributing
 
-We welcome contributions! See our [Contributing Guide](docs/contributing.md).
+We welcome contributions! Please:
 
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📞 Contact
 
