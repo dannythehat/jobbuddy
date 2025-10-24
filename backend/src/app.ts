@@ -6,55 +6,92 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 
-// Import routes
+// Import consolidated routes
 import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
-import cvRoutes from './routes/cvRoutes';
-import jobPreferenceRoutes from './routes/jobPreferenceRoutes';
-import jobRoutes from './routes/jobRoutes';
-import applicationRoutes from './routes/applications';
-import certificateRoutes from './routes/certificates';
-import responseRoutes from './routes/responseRoutes';
-import interviewRoutes from './routes/interviewRoutes';
+import profileRoutes from './routes/profileRoutes';
+import jobsRoutes from './routes/jobsRoutes';
+import automationRoutes from './routes/automationRoutes';
+import analyticsRoutes from './routes/analyticsRoutes';
 
 // Create Express app
 const app = express();
 
-// Middleware
+// Essential middleware stack
 app.use(helmet()); // Security headers
 app.use(cors()); // Enable CORS
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
 app.use(compression()); // Compress responses
-app.use(morgan('dev')); // Logging
+app.use(morgan('combined')); // Logging
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 200, // Increased limit for consolidated endpoints
   standardHeaders: true,
   legacyHeaders: false,
+  message: {
+    status: 'error',
+    message: 'Too many requests, please try again later.'
+  }
 });
 app.use('/api', limiter);
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/cvs', cvRoutes);
-app.use('/api/preferences', jobPreferenceRoutes);
-app.use('/api/jobs', jobRoutes);
-app.use('/api/applications', applicationRoutes);
-app.use('/api/certificates', certificateRoutes);
-app.use('/api/responses', responseRoutes);
-app.use('/api/interviews', interviewRoutes);
+// Consolidated API Routes (9 routes → 5 routes)
+app.use('/api/auth', authRoutes);           // Authentication
+app.use('/api/profile', profileRoutes);     // Users + CVs + Certificates
+app.use('/api/jobs', jobsRoutes);           // Jobs + Preferences + Applications
+app.use('/api/automation', automationRoutes); // Responses + Interviews
+app.use('/api/analytics', analyticsRoutes);  // Dashboard + Insights
 
-// Basic route for testing
+// Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'success',
-    message: 'API is running',
+    message: 'JobBuddi API is running',
+    version: '2.0.0-condensed',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
+    endpoints: {
+      auth: '/api/auth',
+      profile: '/api/profile',
+      jobs: '/api/jobs', 
+      automation: '/api/automation',
+      analytics: '/api/analytics'
+    }
+  });
+});
+
+// API documentation endpoint
+app.get('/api/docs', (req: Request, res: Response) => {
+  res.json({
+    status: 'success',
+    documentation: {
+      title: 'JobBuddi API v2.0 - Condensed',
+      description: 'Consolidated API endpoints for efficient job search automation',
+      endpoints: {
+        '/api/auth': {
+          description: 'Authentication and authorization',
+          methods: ['POST /login', 'POST /register', 'POST /refresh', 'POST /logout']
+        },
+        '/api/profile': {
+          description: 'User profile, CV, and certificates management',
+          methods: ['GET /', 'PUT /', 'POST /cv/upload', 'POST /certificates']
+        },
+        '/api/jobs': {
+          description: 'Job search, matching, and applications',
+          methods: ['GET /', 'POST /search', 'POST /:id/apply', 'GET /applications', 'PUT /preferences']
+        },
+        '/api/automation': {
+          description: 'Email processing and interview automation',
+          methods: ['GET /communications', 'POST /email/classify', 'POST /interview/schedule', 'POST /response/generate']
+        },
+        '/api/analytics': {
+          description: 'Dashboard analytics and insights',
+          methods: ['GET /dashboard', 'GET /applications', 'GET /skills', 'GET /performance']
+        }
+      }
+    }
   });
 });
 
@@ -72,6 +109,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
     status: 'error',
     message: `Cannot ${req.method} ${req.originalUrl}`,
+    suggestion: 'Check /api/docs for available endpoints'
   });
 });
 
@@ -83,7 +121,10 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(statusCode).json({
     status,
     message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV === 'development' && { 
+      stack: err.stack,
+      details: err.details 
+    }),
   });
 });
 
