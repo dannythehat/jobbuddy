@@ -1,8 +1,8 @@
 <div align="center">
 
-![JobBuddy Logo](https://client-uploads.nyc3.digitaloceanspaces.com/images/731d7eb6-98fd-4f14-8af6-386d93ba0e57/2025-10-24T03-50-17-074Z-0b544258.jpg)
+![JobBuddi Logo](https://client-uploads.nyc3.digitaloceanspaces.com/images/731d7eb6-98fd-4f14-8af6-386d93ba0e57/2025-10-24T03-50-17-074Z-0b544258.jpg)
 
-# JobBuddy
+# JobBuddi
 *Your AI-Powered Career Assistant* 🤖
 
 [![Production Ready](https://img.shields.io/badge/Status-PRODUCTION%20READY-brightgreen)](docs/roadmap.md)
@@ -13,7 +13,7 @@
 
 </div>
 
-## 🚀 What is JobBuddy?
+## 🚀 What is JobBuddi?
 
 An intelligent job application automation platform that streamlines your entire job search process with AI-powered assistance. **Now production-ready with enterprise-grade infrastructure!**
 
@@ -118,7 +118,7 @@ npm run start
 
 ## 🚀 Deployment Options
 
-JobBuddy is production-ready with multiple deployment options:
+JobBuddi is production-ready with multiple deployment options:
 
 - **Docker Compose** - Complete stack with one command
 - **Kubernetes** - Scalable container orchestration  
