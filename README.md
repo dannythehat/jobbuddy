@@ -7,6 +7,7 @@
 
 [![Production Ready](https://img.shields.io/badge/Status-PRODUCTION%20READY-brightgreen)](docs/roadmap.md)
 [![Phase 6.1](https://img.shields.io/badge/Phase-6.1%20IN%20PROGRESS-orange)](docs/roadmap.md)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](backend/package.json)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](docker-compose.prod.yml)
 
@@ -69,7 +70,7 @@ npm run build
 npm run start
 ```
 
-📖 **[Full Setup Guide](docs/setup.md)** | 🏗️ **[Architecture](docs/architecture.md)** | 🛣️ **[Roadmap](docs/roadmap.md)**
+📖 **[Full Setup Guide](docs/setup.md)** | 🏗️ **[Architecture](docs/architecture.md)** | 🛣️ **[Roadmap](docs/roadmap.md)** | 🚀 **[Deployment](docs/deployment.md)**
 
 ## 🎯 Current Status
 
@@ -109,8 +110,11 @@ npm run start
 
 - 📖 **[Setup Guide](docs/setup.md)** - Installation & configuration
 - 🏗️ **[Architecture](docs/architecture.md)** - System design & structure  
+- 🔌 **[API Reference](docs/api.md)** - Complete endpoint documentation
 - ✨ **[Features](docs/features.md)** - Detailed feature breakdown
 - 🛣️ **[Roadmap](docs/roadmap.md)** - Development phases & progress
+- 🚀 **[Deployment](docs/deployment.md)** - Production deployment guide
+- 🤝 **[Contributing](docs/contributing.md)** - How to contribute
 
 ## 🚀 Deployment Options
 
@@ -121,7 +125,7 @@ JobBuddy is production-ready with multiple deployment options:
 - **Traditional** - Direct server deployment
 - **Cloud** - AWS, GCP, Azure compatible
 
-See the [docker-compose.prod.yml](docker-compose.prod.yml) file for production configuration.
+See the [Deployment Guide](docs/deployment.md) for detailed instructions.
 
 ## 🤝 Contributing
 
@@ -132,6 +136,12 @@ We welcome contributions! Please:
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+See our [Contributing Guide](docs/contributing.md) for detailed guidelines.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Contact
 
