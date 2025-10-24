@@ -12,6 +12,7 @@ import profileRoutes from './routes/profileRoutes';
 import jobsRoutes from './routes/jobsRoutes';
 import automationRoutes from './routes/automationRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
+import naturalLanguageRoutes from './routes/naturalLanguageRoutes';
 
 // Create Express app
 const app = express();
@@ -37,19 +38,20 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Consolidated API Routes (9 routes → 5 routes)
+// Consolidated API Routes (Phase 6.1: Added Natural Language)
 app.use('/api/auth', authRoutes);           // Authentication
 app.use('/api/profile', profileRoutes);     // Users + CVs + Certificates
 app.use('/api/jobs', jobsRoutes);           // Jobs + Preferences + Applications
 app.use('/api/automation', automationRoutes); // Responses + Interviews
 app.use('/api/analytics', analyticsRoutes);  // Dashboard + Insights
+app.use('/api/nl', naturalLanguageRoutes);   // Phase 6.1: Natural Language Search
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'success',
     message: 'JobBuddi API is running',
-    version: '2.0.0-condensed',
+    version: '2.1.0-phase6.1',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     endpoints: {
@@ -57,7 +59,8 @@ app.get('/api/health', (req: Request, res: Response) => {
       profile: '/api/profile',
       jobs: '/api/jobs', 
       automation: '/api/automation',
-      analytics: '/api/analytics'
+      analytics: '/api/analytics',
+      naturalLanguage: '/api/nl'
     }
   });
 });
@@ -67,8 +70,8 @@ app.get('/api/docs', (req: Request, res: Response) => {
   res.json({
     status: 'success',
     documentation: {
-      title: 'JobBuddi API v2.0 - Condensed',
-      description: 'Consolidated API endpoints for efficient job search automation',
+      title: 'JobBuddi API v2.1 - Phase 6.1',
+      description: 'Enhanced API with Natural Language Job Search capabilities',
       endpoints: {
         '/api/auth': {
           description: 'Authentication and authorization',
@@ -89,6 +92,15 @@ app.get('/api/docs', (req: Request, res: Response) => {
         '/api/analytics': {
           description: 'Dashboard analytics and insights',
           methods: ['GET /dashboard', 'GET /applications', 'GET /skills', 'GET /performance']
+        },
+        '/api/nl': {
+          description: 'Phase 6.1: Natural Language Job Search',
+          methods: ['POST /search/natural', 'POST /search/parse', 'GET /search/suggestions'],
+          examples: [
+            'POST /api/nl/search/natural - "Find remote React jobs in London"',
+            'POST /api/nl/search/parse - Parse query without searching',
+            'GET /api/nl/search/suggestions - Get search examples'
+          ]
         }
       }
     }
