@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import { Op } from 'sequelize';
 import NaturalLanguageService, { ParsedQuery } from '../services/naturalLanguageService';
+import { Job } from '../models/Job';
 
 class EnhancedJobController {
   private nlService: NaturalLanguageService;
@@ -42,7 +44,7 @@ class EnhancedJobController {
       // Convert parsed query to traditional search parameters
       const searchParams = this.convertToSearchParams(parsed);
 
-      // TODO: Integrate with existing job search logic
+      // Perform real database search
       const jobs = await this.performJobSearch(searchParams);
 
       res.json({
@@ -162,24 +164,79 @@ class EnhancedJobController {
   }
 
   /**
-   * Perform actual job search (placeholder - integrate with existing logic)
+   * Perform actual job search using real database
    */
   private async performJobSearch(params: any): Promise<any[]> {
-    // TODO: Integrate with existing job search service
-    // For now, return mock data
-    return [
-      {
-        id: 'job_1',
-        title: 'React Developer',
-        company: 'Tech Corp',
-        location: params.location || 'Remote',
-        salary: params.salaryMin ? `$${params.salaryMin}+` : 'Competitive',
-        type: params.jobType || 'Full-time',
-        skills: params.skills,
-        relevanceScore: params.confidence,
-        description: 'Mock job matching your search criteria'
-      }
-    ];
+    const whereClause: any = {
+      status: 'active'
+    };
+
+    // Build search conditions
+    const orConditions: any[] = [];
+
+    // Search in title, company, description
+    if (params.keywords) {
+      orConditions.push(
+        { title: { [Op.iLike]: `%${params.keywords}%` } },
+        { company: { [Op.iLike]: `%${params.keywords}%` } },
+        { description: { [Op.iLike]: `%${params.keywords}%` } }
+      );
+    }
+
+    // Add skills search
+    if (params.skills && params.skills.length > 0) {
+      params.skills.forEach((skill: string) => {
+        orConditions.push({
+          requiredSkills: { [Op.contains]: [skill] }
+        });
+      });
+    }
+
+    if (orConditions.length > 0) {
+      whereClause[Op.or] = orConditions;
+    }
+
+    // Location filter
+    if (params.location && !params.remote) {
+      whereClause.location = { [Op.iLike]: `%${params.location}%` };
+    }
+
+    // Remote filter
+    if (params.remote) {
+      whereClause.location = { [Op.iLike]: '%remote%' };
+    }
+
+    // Job type filter
+    if (params.jobType) {
+      whereClause.jobType = params.jobType;
+    }
+
+    // Salary filter
+    if (params.salaryMin) {
+      whereClause.salaryMin = { [Op.gte]: params.salaryMin };
+    }
+
+    // Experience level filter
+    if (params.experience) {
+      whereClause.experienceLevel = { [Op.iLike]: `%${params.experience}%` };
+    }
+
+    // Company filter
+    if (params.company) {
+      whereClause.company = { [Op.iLike]: `%${params.company}%` };
+    }
+
+    // Execute search
+    const jobs = await Job.findAll({
+      where: whereClause,
+      limit: 20,
+      order: [['postedDate', 'DESC']]
+    });
+
+    return jobs.map(job => ({
+      ...job.toJSON(),
+      relevanceScore: params.confidence
+    }));
   }
 }
 
