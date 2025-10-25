@@ -2,6 +2,14 @@
 import { pool } from '../../config/database';
 import { LinkedInClient } from './LinkedInClient';
 import { IndeedClient } from './IndeedClient';
+import { GlassdoorClient } from './GlassdoorClient';
+import { ZipRecruiterClient } from './ZipRecruiterClient';
+import { MonsterClient } from './MonsterClient';
+import { ReedClient } from './ReedClient';
+import { SeekClient } from './SeekClient';
+import { NaukriClient } from './NaukriClient';
+import { DiceClient } from './DiceClient';
+import { WellfoundClient } from './WellfoundClient';
 import { JobBoardSearchParams, JobBoardJob } from '../../types/jobBoard';
 import { jobBoardOAuthService } from '../jobBoardOAuthService';
 
@@ -9,8 +17,37 @@ export class JobFetchService {
   private clients: Map<string, any> = new Map();
 
   constructor() {
+    // Original clients
     this.clients.set('linkedin', new LinkedInClient());
     this.clients.set('indeed', new IndeedClient());
+    
+    // New global clients
+    this.clients.set('glassdoor', new GlassdoorClient());
+    this.clients.set('ziprecruiter', new ZipRecruiterClient());
+    this.clients.set('monster', new MonsterClient());
+    
+    // Regional clients
+    this.clients.set('reed', new ReedClient()); // UK
+    this.clients.set('seek', new SeekClient()); // Australia/NZ
+    this.clients.set('naukri', new NaukriClient()); // India
+    
+    // Specialized clients
+    this.clients.set('dice', new DiceClient()); // Tech
+    this.clients.set('wellfound', new WellfoundClient()); // Startups
+  }
+
+  /**
+   * Get all available provider names
+   */
+  getAvailableProviders(): string[] {
+    return Array.from(this.clients.keys());
+  }
+
+  /**
+   * Check if a provider is supported
+   */
+  isProviderSupported(providerName: string): boolean {
+    return this.clients.has(providerName);
   }
 
   /**
@@ -42,6 +79,31 @@ export class JobFetchService {
     await this.storeJobs(jobs, connection.provider_id);
 
     return jobs;
+  }
+
+  /**
+   * Fetch jobs from multiple providers in parallel
+   */
+  async fetchFromMultipleProviders(
+    userId: string,
+    providerNames: string[],
+    params: JobBoardSearchParams
+  ): Promise<Map<string, JobBoardJob[]>> {
+    const results = new Map<string, JobBoardJob[]>();
+
+    await Promise.allSettled(
+      providerNames.map(async (providerName) => {
+        try {
+          const jobs = await this.fetchFromProvider(userId, providerName, params);
+          results.set(providerName, jobs);
+        } catch (error) {
+          console.error(`Failed to fetch from ${providerName}:`, error);
+          results.set(providerName, []);
+        }
+      })
+    );
+
+    return results;
   }
 
   /**
