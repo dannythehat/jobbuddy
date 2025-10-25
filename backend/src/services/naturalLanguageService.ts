@@ -46,23 +46,25 @@ class NaturalLanguageService {
       const systemPrompt = `You are a job search query parser. Convert natural language job search queries into structured JSON.
 
 Extract these fields when present:
-- keywords: array of job-related terms
-- location: city, region, or "remote"
-- salary: {min, max, currency} if mentioned
+- keywords: array of job-related terms (job titles, roles)
+- location: city, region, country
+- salary: {min, max, currency} if mentioned (convert to numbers)
 - jobType: "full-time", "part-time", "contract", "internship"
-- experience: "junior", "mid-level", "senior", or years
-- remote: boolean if remote work mentioned
-- skills: array of technical skills
-- company: specific company or company type
+- experience: "Entry Level", "Mid Level", "Senior Level"
+- remote: true if remote/work-from-home mentioned
+- skills: array of technical skills (React, Python, etc)
+- company: specific company name or type (startup, enterprise)
 
-Return JSON with confidence score (0-1).`;
+Return ONLY valid JSON with confidence score (0-1). No markdown, no explanations.`;
 
-      const userPrompt = `Parse this job search query: "${query}"
+      const userPrompt = `Parse: "${query}"
 
 Examples:
 "Find remote React jobs in London paying over £50k" → {"keywords":["React","developer"],"location":"London","salary":{"min":50000,"currency":"GBP"},"remote":true,"skills":["React"],"confidence":0.9}
 
-"Senior Python developer positions" → {"keywords":["Python","developer"],"experience":"senior","skills":["Python"],"confidence":0.8}`;
+"Senior Python developer positions" → {"keywords":["Python","developer"],"experience":"Senior Level","skills":["Python"],"confidence":0.85}
+
+"Full-time data analyst jobs in New York" → {"keywords":["data","analyst"],"location":"New York","jobType":"full-time","confidence":0.8}`;
 
       const response = await this.openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
@@ -71,7 +73,8 @@ Examples:
           { role: 'user', content: userPrompt }
         ],
         temperature: 0.1,
-        max_tokens: 500
+        max_tokens: 500,
+        response_format: { type: 'json_object' }
       });
 
       const content = response.choices[0]?.message?.content;
@@ -83,7 +86,14 @@ Examples:
       const parsed = JSON.parse(content);
       
       return {
-        ...parsed,
+        keywords: parsed.keywords || [],
+        location: parsed.location,
+        salary: parsed.salary,
+        jobType: parsed.jobType,
+        experience: parsed.experience,
+        remote: parsed.remote || false,
+        skills: parsed.skills || [],
+        company: parsed.company,
         originalQuery: query,
         confidence: parsed.confidence || 0.5
       };
@@ -93,9 +103,11 @@ Examples:
       
       // Fallback: basic keyword extraction
       const keywords = this.extractBasicKeywords(query);
+      const remote = /remote|work from home|wfh/i.test(query);
       
       return {
         keywords,
+        remote,
         originalQuery: query,
         confidence: 0.3
       };
@@ -109,13 +121,16 @@ Examples:
     const commonJobTerms = [
       'developer', 'engineer', 'manager', 'analyst', 'designer',
       'react', 'python', 'javascript', 'java', 'node', 'angular',
-      'senior', 'junior', 'lead', 'full-time', 'part-time', 'remote'
+      'senior', 'junior', 'lead', 'full-time', 'part-time', 'remote',
+      'frontend', 'backend', 'fullstack', 'devops', 'data'
     ];
 
     const words = query.toLowerCase().split(/\s+/);
-    return words.filter(word => 
+    const filtered = words.filter(word => 
       commonJobTerms.includes(word) || word.length > 3
     );
+
+    return filtered.length > 0 ? filtered : ['developer'];
   }
 
   /**
@@ -123,15 +138,15 @@ Examples:
    */
   generateSuggestions(query: string): string[] {
     const suggestions = [
-      'Try: "Find remote React jobs in London"',
-      'Try: "Senior Python developer positions"',
-      'Try: "Part-time marketing roles near Manchester"',
-      'Try: "Data science jobs at startups"'
+      'Find remote React jobs in London',
+      'Senior Python developer positions',
+      'Part-time marketing roles near Manchester',
+      'Data science jobs at startups',
+      'Junior frontend developer internships'
     ];
 
-    // Simple suggestion logic - can be enhanced with AI later
     if (query.length < 10) {
-      return suggestions.slice(0, 2);
+      return suggestions.slice(0, 3);
     }
 
     return suggestions;
