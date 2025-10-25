@@ -87,11 +87,6 @@ npm run start
 - Enhanced user experience with conversational search
 - Smart filter translation and result optimization
 
-☁️ **CLOUD MIGRATION PLANNED - Supabase Integration**
-- Migrating to Supabase cloud PostgreSQL database
-- Minimal code changes - backend stays the same!
-- See [Supabase Migration Guide](docs/supabase-migration.md)
-
 **Achievement:** Full production launch with enterprise infrastructure! 🚀
 
 ## 🛠️ Tech Stack
@@ -99,7 +94,6 @@ npm run start
 **Frontend:** React, TypeScript, Material UI, Recharts  
 **Backend:** Node.js, Express, PostgreSQL, Redis  
 **AI:** OpenAI API, Intelligent parsing & generation  
-**Cloud:** Supabase (PostgreSQL, Auth, Storage) - *Migration Planned*
 **Infrastructure:** Docker, Nginx, Prometheus, Grafana
 **Security:** Helmet, Rate Limiting, Input Validation
 **Performance:** Redis Caching, Compression, Monitoring
@@ -120,7 +114,6 @@ npm run start
 - ✨ **[Features](docs/features.md)** - Detailed feature breakdown
 - 🛣️ **[Roadmap](docs/roadmap.md)** - Development phases & progress
 - 🚀 **[Deployment](docs/deployment.md)** - Production deployment guide
-- ☁️ **[Supabase Migration](docs/supabase-migration.md)** - Cloud database migration
 - 🤝 **[Contributing](docs/contributing.md)** - How to contribute
 
 ## 🚀 Deployment Options
@@ -152,7 +145,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Contact
 
-**Danny Allan** - dannythetruther@gmail.com  
+**Danny Allan** - danny@ai-on-auto.com  
 **Project:** [github.com/dannythehat/jobbuddy](https://github.com/dannythehat/jobbuddy)
 
 ---
