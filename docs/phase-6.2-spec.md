@@ -28,3 +28,37 @@ Allow customers to connect job sites they've paid for easily based on their coun
 - Visual marketplace interface for easy selection
 - One-click connection setup and management
 - Connection status monitoring and health checks
+
+## Regional Job Board Database
+
+### 🇺🇸 United States
+- Indeed, LinkedIn, Glassdoor, ZipRecruiter, Monster, CareerBuilder
+
+### 🇬🇧 United Kingdom
+- Reed, Totaljobs, CV-Library, Indeed UK, Guardian Jobs, Fish4Jobs
+
+### 🇩🇪 Germany
+- StepStone, Xing, Indeed DE, Monster DE, Jobs.de, Stellenanzeigen
+
+### 🇦🇺 Australia
+- Seek, Indeed AU, CareerOne, Jora, Ethical Jobs
+
+### 🇨🇦 Canada
+- Indeed CA, Workopolis, Monster CA, Job Bank, Eluta
+
+### 🇫🇷 France
+- Indeed FR, Pôle Emploi, Monster FR, RegionsJob, Apec
+
+### 🇪🇸 Spain
+- InfoJobs, Indeed ES, Infoempleo, Trabajos.com
+
+### 🇮🇹 Italy
+- Indeed IT, InfoJobs IT, Monster IT, Subito Lavoro
+
+### 🇳🇱 Netherlands
+- Indeed NL, Nationale Vacaturebank, Monsterboard NL
+
+### 🇮🇳 India
+- Naukri, Indeed IN, Monster India, Shine, TimesJobs
+
+**+ Premium/Paid boards per region**
