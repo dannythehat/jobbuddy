@@ -62,3 +62,21 @@ Allow customers to connect job sites they've paid for easily based on their coun
 - Naukri, Indeed IN, Monster India, Shine, TimesJobs
 
 **+ Premium/Paid boards per region**
+
+## Technical Implementation
+
+### Backend Infrastructure
+
+**Firebase Integration:**
+- **Firestore Database:** Real-time job board connections and user preferences
+- **Firebase Authentication:** Unified OAuth management for job board integrations
+- **Cloud Functions:** Automated job scanning and application workflows
+- **Firebase Storage:** Store user documents, CVs, and application materials
+- **Real-time Database:** Live connection status and job alerts
+
+**Additional Services:**
+- **Localization Service:** React i18next for dynamic UI translation
+- **Job Board Registry:** Firestore collection of supported platforms with regional mapping
+- **Integration Manager:** OAuth flows and API key management per platform
+- **Universal Job Scanner:** Multi-platform job fetching with data normalization
+- **Connection Health Monitor:** Real-time status tracking for all integrations
