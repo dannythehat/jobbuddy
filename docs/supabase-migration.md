@@ -19,3 +19,25 @@ Migrate JobBuddi from local PostgreSQL to Supabase cloud database with minimal c
 - ✅ Redis caching
 - ✅ Google Calendar integration
 - ✅ n8n workflows
+
+## 🏗️ Architecture Change
+
+### Before (Current)
+```
+Frontend (React)
+    ↓
+Backend (Node.js/Express)
+    ↓
+PostgreSQL (Local) + Redis
+```
+
+### After (Supabase)
+```
+Frontend (React)
+    ↓
+Backend (Node.js/Express) ← NO CHANGES!
+    ↓
+Supabase PostgreSQL (Cloud) + Redis
+```
+
+**Key Point:** Only the database connection string changes!
