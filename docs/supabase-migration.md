@@ -42,6 +42,28 @@ Supabase PostgreSQL (Cloud) + Redis
 
 **Key Point:** Only the database connection string changes!
 
+## 💡 Why Supabase?
+
+### Benefits
+- ☁️ **Cloud-hosted** - No server management
+- 💰 **Free tier** - 500MB database, 1GB storage, 50K users
+- 🔄 **Real-time** - Live data updates capability
+- 🔐 **Built-in auth** - Optional upgrade from JWT
+- 📦 **Storage** - File uploads for CVs/documents
+- 🚀 **Auto-scaling** - Grows with your users
+- 🛠️ **PostgreSQL** - Same database you already use!
+- 🤖 **AI Agent Support** - I can directly help manage it!
+
+### Free Tier Limits
+- 500MB database storage
+- 1GB file storage
+- 50,000 monthly active users
+- 2GB bandwidth
+- Unlimited API requests
+- 500MB Edge Functions
+
+**Perfect for starting out and scaling!**
+
 ## 📝 Migration Steps
 
 ### Phase 1: Supabase Setup (Not Started)
