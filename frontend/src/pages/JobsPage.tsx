@@ -222,6 +222,15 @@ const JobsPage: React.FC = () => {
     fetchAllJobs();
   };
 
+  const handleNaturalLanguageSearch = (query: string, data: any) => {
+    if (data.jobs && data.jobs.length > 0) {
+      setJobs(data.jobs);
+      setActiveTab(1);
+      setSuccess(`Found ${data.jobs.length} jobs matching: "${query}"`);
+    } else {
+      setError('No jobs found matching your search');
+    }
+  };
   return (
     <Container maxWidth="lg">
       <Box sx={{ mb: 4 }}>
