@@ -3,67 +3,107 @@
 ## ✅ Current Status
 - **Phase 5**: Production Ready ✅
 - **Phase 6.1 Stage 1**: Backend NL Search Complete ✅  
-- **Phase 7.1**: OAuth Foundation Built ✅
+- **Phase 6.1 Stage 2**: Frontend UI Ready (needs application) ⏳
+- **Phase 7 Integration**: Routes & Setup Complete ✅
 - **All Critical Bugs**: Fixed ✅
 
 ---
 
-## 🎯 PRIORITY 1: Integrate Phase 7 Routes (15 minutes)
+## 🎯 COMPLETED: Phase 7 Integration ✅
 
-### Task: Connect Job Board OAuth to Main App
+### ✅ Task 1: Connect Job Board OAuth to Main App (DONE)
+- Routes integrated into `backend/src/app.ts`
+- Health check updated with new endpoints
+- API version bumped to 2.2.0-phase7
 
-**File to Edit**: `backend/src/app.ts`
+### ✅ Task 2: Environment Configuration (DONE)
+- Added `ENCRYPTION_KEY` to `.env.example`
+- Documented generation instructions
 
-**Step 1**: Add imports (line 15)
-```typescript
-import jobBoardRoutes from './routes/jobBoardRoutes';
-import oauthRoutes from './routes/oauthRoutes';
+### ✅ Task 3: Setup Automation (DONE)
+- Created `scripts/setup-phase-7.sh`
+- Automated migration + key generation
+- Verification checks included
+
+**To Complete Setup:**
+```bash
+chmod +x scripts/setup-phase-7.sh
+./scripts/setup-phase-7.sh
 ```
 
-**Step 2**: Add routes (after line 46)
-```typescript
-app.use('/api/job-boards', jobBoardRoutes);
-app.use('/api/oauth', oauthRoutes);
-```
-
-**Step 3**: Update health check endpoint object (line 60)
-```typescript
-jobBoards: '/api/job-boards',
-oauth: '/api/oauth'
-```
-
-**Step 4**: Test
+**Test:**
 ```bash
 curl http://localhost:3001/api/job-boards/providers
+curl http://localhost:3001/api/health
 ```
 
 ---
 
-## 🎯 PRIORITY 2: Run Phase 7 Database Migration (5 minutes)
+## 🎯 NEXT PRIORITY: Phase 6.1 Stage 2 - Frontend UI (75 minutes)
 
-**File**: `migrations/007_job_board_integrations.sql`
+### Task: Integrate Natural Language Search into JobsPage
 
+**Status:** Implementation ready, needs code application
+
+**Quick Apply:**
 ```bash
-psql -U postgres -d jobbuddy -f migrations/007_job_board_integrations.sql
+chmod +x scripts/apply-phase-6.1-stage-2.sh
+./scripts/apply-phase-6.1-stage-2.sh
 ```
 
-**Verify**:
-```sql
-SELECT COUNT(*) FROM job_board_providers;
--- Should return 12
+**Manual Apply:** See `docs/PHASE-6.1-STAGE-2-INTEGRATION.md`
+
+**Test Queries:**
+- "Find remote React jobs in London"
+- "Senior Python developer positions"
+- "Data science jobs paying over $100k"
+
+---
+
+## 🎯 FUTURE: Phase 7.1.1 - Job Fetching (3.5 hours)
+
+### Task: Implement Job Fetching from Connected Boards
+
+**Steps:**
+1. Implement LinkedIn client (1 hour)
+2. Create job sync service (1 hour)
+3. Add sync endpoints (30 min)
+4. Test job fetching (30 min)
+
+**See:** `NEXT-STEPS-PHASE-7.1.1.md`
+
+---
+
+## 📊 Progress Summary
+
+| Phase | Status | Time |
+|-------|--------|------|
+| Phase 5: Production | ✅ Complete | - |
+| Phase 6.1 Stage 1: Backend | ✅ Complete | - |
+| Phase 6.1 Stage 2: Frontend | ⏳ Ready | 75 min |
+| Phase 7: Integration | ✅ Complete | 15 min |
+| Phase 7.1.1: Job Fetching | 📋 Planned | 3.5 hrs |
+
+---
+
+## 🚀 Quick Commands
+
+**Phase 7 Setup:**
+```bash
+./scripts/setup-phase-7.sh
+```
+
+**Phase 6.1 Stage 2:**
+```bash
+./scripts/apply-phase-6.1-stage-2.sh
+```
+
+**Start Development:**
+```bash
+cd backend && npm run dev
+cd frontend && npm start
 ```
 
 ---
 
-## 🎯 PRIORITY 3: Add Encryption Key (2 minutes)
-
-**File**: `backend/.env`
-
-Add this line:
-```env
-ENCRYPTION_KEY=<run: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))">
-```
-
----
-
-More tasks in separate document...
+**Latest Achievement:** Phase 7 OAuth integration complete with 12 job boards! 🎉
