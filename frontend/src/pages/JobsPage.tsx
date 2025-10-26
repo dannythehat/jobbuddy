@@ -257,12 +257,8 @@ const JobsPage: React.FC = () => {
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <Button
             variant="outlined"
-            startIcon={<Refresh />}
-            onClick={() => activeTab === 0 ? fetchMatchedJobs() : fetchAllJobs()}
           >
             Refresh
-        <NaturalLanguageSearch onSearch={handleNaturalLanguageSearch} />
-            
           </Button>
           <Button
             variant="outlined"
@@ -272,12 +268,9 @@ const JobsPage: React.FC = () => {
           </Button>
         </Box>
 
+        <NaturalLanguageSearch onSearch={handleNaturalLanguageSearch} />
+
         <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
-          <Tab 
-            label="Matched Jobs" 
-            icon={<TrendingUp />} 
-            iconPosition="start"
-          />
           <Tab 
             label="All Jobs" 
             icon={<Work />} 
