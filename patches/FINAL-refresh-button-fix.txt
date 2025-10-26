@@ -1,0 +1,7 @@
+          <Button
+            variant="outlined"
+            startIcon={<Refresh />}
+            onClick={() => activeTab === 0 ? fetchMatchedJobs() : fetchAllJobs()}
+          >
+            Refresh
+          </Button>
