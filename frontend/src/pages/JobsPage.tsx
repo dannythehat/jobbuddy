@@ -799,3 +799,200 @@ const JobsPage: React.FC = () => {
 };
 
 export default JobsPage;
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+            {success}
+          </Alert>
+        )}
+
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <Button
+            variant="outlined"
+            startIcon={<Refresh />}
+            onClick={() => activeTab === 0 ? fetchMatchedJobs() : fetchAllJobs()}
+          >
+            Refresh
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={createSampleJobs}
+          >
+            Create Sample Jobs
+          </Button>
+        </Box>
+
+        <NaturalLanguageSearch onSearch={handleNaturalLanguageSearch} />
+
+        <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
+          <Tab 
+            label="Matched Jobs" 
+            icon={<TrendingUp />} 
+            iconPosition="start"
+          />
+          <Tab 
+            label="All Jobs" 
+            icon={<Work />} 
+            iconPosition="start"
+          />
+        </Tabs>
+      </Box>
+
+      {/* Filters for All Jobs tab */}
+      {activeTab === 1 && (
+        <Paper sx={{ p: 3, mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+            <FilterList sx={{ mr: 1 }} />
+            Filters
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                label="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Job title, company..."
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                label="Location"
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                placeholder="City, state, or remote"
+              />
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <FormControl fullWidth>
+                <InputLabel>Job Type</InputLabel>
+                <Select
+                  value={jobTypeFilter}
+                  onChange={(e) => setJobTypeFilter(e.target.value)}
+                  label="Job Type"
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="full-time">Full-time</MenuItem>
+                  <MenuItem value="part-time">Part-time</MenuItem>
+                  <MenuItem value="contract">Contract</MenuItem>
+                  <MenuItem value="internship">Internship</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <TextField
+                fullWidth
+                label="Min Salary"
+                type="number"
+                value={salaryMinFilter}
+                onChange={(e) => setSalaryMinFilter(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button variant="contained" onClick={applyFilters}>
+                  Apply
+                </Button>
+                <Button variant="outlined" onClick={clearFilters}>
+                  Clear
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      )}
+
+      {loading ? (
+        <Box sx={{ mt: 4 }}>
+          <LinearProgress />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Loading jobs...
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          {/* Matched Jobs Tab */}
+          {activeTab === 0 && (
+            <>
+              {matchedJobs.length === 0 ? (
+                <Paper sx={{ p: 4, textAlign: 'center' }}>
+                  <Work sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h5" gutterBottom>
+                    No matched jobs found
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                    Make sure you have set your job preferences and try creating some sample jobs.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={createSampleJobs}
+                  >
+                    Create Sample Jobs
+                  </Button>
+                </Paper>
+              ) : (
+                <Grid container spacing={3}>
+                  {matchedJobs.map((match) => (
+                    <Grid item xs={12} md={6} key={match.jobId}>
+                      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                        <CardContent sx={{ flexGrow: 1 }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                            <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
+                              {match.job.title}
+                            </Typography>
+                            <Chip
+                              label={`${Math.round(match.score * 100)}% Match`}
+                              color={getMatchScoreColor(match.score) as any}
+                              size="small"
+                            />
+                          </Box>
+
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Business sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+                            <Typography variant="body2" color="text.secondary">
+                              {match.job.company}
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <LocationOn sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+                            <Typography variant="body2" color="text.secondary">
+                              {match.job.location}
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                            <AttachMoney sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
+                            <Typography variant="body2" color="text.secondary">
+                              {formatSalary(match.job.salaryMin, match.job.salaryMax, match.job.salaryCurrency)}
+                            </Typography>
+                          </Box>
+
+                          <Typography variant="body2" sx={{ mb: 2 }}>
+                            {match.job.description.substring(0, 150)}...
+                          </Typography>
+
+                          {match.matchReasons.length > 0 && (
+                            <Box sx={{ mb: 2 }}>
+                              <Typography variant="body2" sx={{ fontWeight: 'medium', mb: 1 }}>
+                                Why this matches:
+                              </Typography>
+                              {match.matchReasons.slice(0, 2).map((reason, index) => (
+                                <Typography key={index} variant="body2" color="success.main" sx={{ fontSize: '0.875rem' }}>
+                                  • {reason}
+                                </Typography>
+                              ))}
+                            </Box>
+                          )}
+
+                          {match.job.requiredSkills && match.job.requiredSkills.length > 0 && (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                              {match.job.requiredSkills.slice(0, 4).map((skill, index) => (
+                                <Chip
+                                  key={index}
+                                  label={skill}
+                                  size="small"
+                                  variant="outlined"
+                                />
+                              ))}
+                              {match.job.require
