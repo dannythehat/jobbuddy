@@ -1,4 +1,5 @@
-import NaturalLanguageSearch from '../components/NaturalLanguageSearch';import React, { useState, useEffect } from 'react';
+import NaturalLanguageSearch from '../components/NaturalLanguageSearch'
+  ;import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
