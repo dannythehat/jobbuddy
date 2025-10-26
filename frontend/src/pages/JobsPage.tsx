@@ -1,5 +1,5 @@
-import NaturalLanguageSearch from '../components/NaturalLanguageSearch'
-  ;import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import NaturalLanguageSearch from '../components/NaturalLanguageSearch';
 import {
   Container,
   Typography,
@@ -35,6 +35,150 @@ import {
   LocationOn,
   AttachMoney,
   Business,
+  Star,
+  StarBorder,
+  Launch,
+  FilterList,
+  Refresh,
+  TrendingUp,
+} from '@mui/icons-material';
+
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  jobType: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  salaryCurrency?: string;
+  description: string;
+  requiredSkills?: string[];
+  experienceLevel?: string;
+  postedDate: string;
+  applicationUrl: string;
+  status: string;
+}
+
+interface JobMatch {
+  jobId: string;
+  score: number;
+  matchReasons: string[];
+  job: Job;
+}
+
+const JobsPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [matchedJobs, setMatchedJobs] = useState<JobMatch[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [jobDialogOpen, setJobDialogOpen] = useState(false);
+  
+  // Filters
+  const [searchTerm, setSearchTerm] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const [jobTypeFilter, setJobTypeFilter] = useState('');
+  const [salaryMinFilter, setSalaryMinFilter] = useState('');
+
+  useEffect(() => {
+    if (activeTab === 0) {
+      fetchMatchedJobs();
+    } else {
+      fetchAllJobs();
+    }
+  }, [activeTab]);
+
+  const fetchMatchedJobs = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/jobs/matches', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMatchedJobs(data.data.matches);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to fetch matched jobs');
+      }
+    } catch (err) {
+      setError('Error fetching matched jobs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAllJobs = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (locationFilter) params.append('location', locationFilter);
+      if (jobTypeFilter) params.append('jobType', jobTypeFilter);
+      if (salaryMinFilter) params.append('salaryMin', salaryMinFilter);
+
+      const response = await fetch(`/api/jobs?${params.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setJobs(data.data.jobs);
+      } else {
+        setError('Failed to fetch jobs');
+      }
+    } catch (err) {
+      setError('Error fetching jobs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createSampleJobs = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/jobs/sample', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setSuccess('Sample jobs created successfully!');
+        if (activeTab === 0) {
+          fetchMatchedJobs();
+        } else {
+          fetchAllJobs();
+        }
+      } else {
+        setError('Failed to create sample jobs');
+      }
+    } catch (err) {
+      setError('Error creating sample jobs');
+    }
+  };
+
+  const handleJobClick = (job: Job) => {
+    setSelectedJob(job);
+    setJobDialogOpen(true);
+  };
+
+  const formatSalary = (min?: number, max?: number, currency = 'USD') => {
+    if (!min && !max) return 'Salary not specified';
+    
+    const formatter = new Intl.NumberFormat  Business,
   Star,
   StarBorder,
   Launch,
