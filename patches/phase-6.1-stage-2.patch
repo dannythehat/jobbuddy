@@ -1,0 +1,37 @@
+diff --git a/frontend/src/pages/JobsPage.tsx b/frontend/src/pages/JobsPage.tsx
+index 6de047d..updated 100644
+--- a/frontend/src/pages/JobsPage.tsx
++++ b/frontend/src/pages/JobsPage.tsx
+@@ -1,4 +1,5 @@
+ import React, { useState, useEffect } from 'react';
++import NaturalLanguageSearch from '../components/NaturalLanguageSearch';
+ import {
+   Container,
+   Typography,
+@@ -220,6 +221,16 @@ const JobsPage: React.FC = () => {
+     fetchAllJobs();
+   };
+ 
++  const handleNaturalLanguageSearch = (query: string, data: any) => {
++    if (data.jobs && data.jobs.length > 0) {
++      setJobs(data.jobs);
++      setActiveTab(1); // Switch to "All Jobs" tab
++      setSuccess(`Found ${data.jobs.length} jobs matching: "${query}"`);
++    } else {
++      setError('No jobs found matching your search');
++    }
++  };
++
+   return (
+     <Container maxWidth="lg">
+       <Box sx={{ mb: 4 }}>
+@@ -258,6 +269,9 @@ const JobsPage: React.FC = () => {
+           </Button>
+         </Box>
+ 
++        {/* Natural Language Search */}
++        <NaturalLanguageSearch onSearch={handleNaturalLanguageSearch} />
++
+         <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
+           <Tab 
+             label="Matched Jobs"
