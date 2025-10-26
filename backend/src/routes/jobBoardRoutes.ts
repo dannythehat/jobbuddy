@@ -3,14 +3,12 @@ import express from 'express';
 import { protect } from '../middleware/auth';
 import { jobBoardOAuthService } from '../services/jobBoardOAuthService';
 import { jobBoardConnectionService } from '../services/jobBoardConnectionService';
+import { JobBoardSyncService } from '../services/jobBoardSyncService';
 import { pool } from '../config/database';
 
 const router = express.Router();
+const syncService = new JobBoardSyncService();
 
-/**
- * GET /api/job-boards/providers
- * Get list of available job board providers
- */
 router.get('/providers', protect, async (req, res) => {
   try {
     const query = `
@@ -39,10 +37,6 @@ router.get('/providers', protect, async (req, res) => {
   }
 });
 
-/**
- * GET /api/job-boards/connections
- * Get user's job board connections
- */
 router.get('/connections', protect, async (req, res) => {
   try {
     const connections = await jobBoardConnectionService.getUserConnections(req.user.id);
@@ -59,10 +53,6 @@ router.get('/connections', protect, async (req, res) => {
   }
 });
 
-/**
- * GET /api/job-boards/connections/health
- * Check health of all connections
- */
 router.get('/connections/health', protect, async (req, res) => {
   try {
     const health = await jobBoardConnectionService.checkConnectionHealth(req.user.id);
@@ -79,10 +69,6 @@ router.get('/connections/health', protect, async (req, res) => {
   }
 });
 
-/**
- * POST /api/job-boards/connect/:provider
- * Initiate OAuth connection to job board
- */
 router.post('/connect/:provider', protect, async (req, res) => {
   try {
     const { provider } = req.params;
@@ -108,15 +94,10 @@ router.post('/connect/:provider', protect, async (req, res) => {
   }
 });
 
-/**
- * DELETE /api/job-boards/connections/:connectionId
- * Disconnect job board
- */
 router.delete('/connections/:connectionId', protect, async (req, res) => {
   try {
     const { connectionId } = req.params;
     
-    // Verify connection belongs to user
     const connection = await jobBoardConnectionService.getConnection(connectionId);
     if (!connection || connection.user_id !== req.user.id) {
       return res.status(404).json({
@@ -139,15 +120,10 @@ router.delete('/connections/:connectionId', protect, async (req, res) => {
   }
 });
 
-/**
- * POST /api/job-boards/connections/:connectionId/refresh
- * Refresh connection token
- */
 router.post('/connections/:connectionId/refresh', protect, async (req, res) => {
   try {
     const { connectionId } = req.params;
     
-    // Verify connection belongs to user
     const connection = await jobBoardConnectionService.getConnection(connectionId);
     if (!connection || connection.user_id !== req.user.id) {
       return res.status(404).json({
@@ -166,6 +142,56 @@ router.post('/connections/:connectionId/refresh', protect, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to refresh connection'
+    });
+  }
+});
+
+// Phase 7.1.1: Job Sync Endpoints
+router.post('/sync/:connectionId', protect, async (req, res) => {
+  try {
+    const { connectionId } = req.params;
+    const searchParams = req.body;
+    
+    const connection = await jobBoardConnectionService.getConnection(connectionId);
+    if (!connection || connection.user_id !== req.user.id) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      });
+    }
+    
+    const result = await syncService.syncJobsFromProvider(
+      connectionId,
+      connection.provider_id,
+      connection.access_token,
+      searchParams
+    );
+    
+    res.json({
+      success: result.success,
+      data: result
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to sync jobs'
+    });
+  }
+});
+
+router.post('/sync-all', protect, async (req, res) => {
+  try {
+    const searchParams = req.body;
+    const result = await syncService.syncJobsForUser(req.user.id, searchParams);
+    
+    res.json({
+      success: result.success,
+      data: result
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to sync jobs'
     });
   }
 });
