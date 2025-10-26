@@ -77,6 +77,229 @@ const JobsPage: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [jobDialogOpen, setJobDialogOpen] = useState(false);
   
+  const [searchTerm, setSearchTerm] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const [jobTypeFilter, setJobTypeFilter] = useState('');
+  const [salaryMinFilter, setSalaryMinFilter] = useState('');
+
+  useEffect(() => {
+    if (activeTab === 0) {
+      fetchMatchedJobs();
+    } else {
+      fetchAllJobs();
+    }
+  }, [activeTab]);
+
+  const fetchMatchedJobs = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/jobs/matches', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMatchedJobs(data.data.matches);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to fetch matched jobs');
+      }
+    } catch (err) {
+      setError('Error fetching matched jobs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAllJobs = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (locationFilter) params.append('location', locationFilter);
+      if (jobTypeFilter) params.append('jobType', jobTypeFilter);
+      if (salaryMinFilter) params.append('salaryMin', salaryMinFilter);
+
+      const response = await fetch(`/api/jobs?${params.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setJobs(data.data.jobs);
+      } else {
+        setError('Failed to fetch jobs');
+      }
+    } catch (err) {
+      setError('Error fetching jobs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createSampleJobs = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/jobs/sample', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setSuccess('Sample jobs created successfully!');
+        if (activeTab === 0) {
+          fetchMatchedJobs();
+        } else {
+          fetchAllJobs();
+        }
+      } else {
+        setError('Failed to create sample jobs');
+      }
+    } catch (err) {
+      setError('Error creating sample jobs');
+    }
+  };
+
+  const handleJobClick = (job: Job) => {
+    setSelectedJob(job);
+    setJobDialogOpen(true);
+  };
+
+  const formatSalary = (min?: number, max?: number, currency = 'USD') => {
+    if (!min && !max) return 'Salary not specified';
+    
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+
+    if (min && max) {
+      return `${formatter.format(min)} - ${formatter.format(max)}`;
+    } else if (min) {
+      return `${formatter.format(min)}+`;
+    } else {
+      return `Up to ${formatter.format(max!)}`;
+    }
+  };
+
+  const getMatchScoreColor = (score: number) => {
+    if (score >= 0.8) return 'success';
+    if (score >= 0.6) return 'warning';
+    return 'default';
+  };
+
+  const getMatchScoreText = (score: number) => {
+    if (score >= 0.8) return 'Excellent Match';
+    if (score >= 0.6) return 'Good Match';
+    if (score >= 0.4) return 'Fair Match';
+    return 'Basic Match';
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
+  const applyFilters = () => {
+    fetchAllJobs();
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setLocationFilter('');
+    setJobTypeFilter('');
+    setSalaryMinFilter('');
+    fetchAllJobs();
+  };
+
+  const handleNaturalLanguageSearch = (query: string, data: any) => {
+    if (data.jobs && data.jobs.length > 0) {
+      setJobs(data.jobs);
+      setActiveTab(1);
+      setSuccess(`Found ${data.jobs.length} jobs matching: "${query}"`);
+    } else {
+      setError('No jobs found matching your search');
+    }
+  };
+
+  return (
+    <Container maxWidth="lg">
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Job Opportunities
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+          Discover jobs that match your skills and preferences.
+        </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
+
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+            {success}
+          </Alert>
+        )}
+
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <Button
+            variant="outlined"
+              Business,
+  Star,
+  StarBorder,
+  Launch,
+  FilterList,
+  Refresh,
+  TrendingUp,
+} from '@mui/icons-material';
+
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  jobType: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  salaryCurrency?: string;
+  description: string;
+  requiredSkills?: string[];
+  experienceLevel?: string;
+  postedDate: string;
+  applicationUrl: string;
+  status: string;
+}
+
+interface JobMatch {
+  jobId: string;
+  score: number;
+  matchReasons: string[];
+  job: Job;
+}
+
+const JobsPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [matchedJobs, setMatchedJobs] = useState<JobMatch[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [jobDialogOpen, setJobDialogOpen] = useState(false);
+  
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
