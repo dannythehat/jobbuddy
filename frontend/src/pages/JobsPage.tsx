@@ -260,6 +260,8 @@ const JobsPage: React.FC = () => {
             onClick={() => activeTab === 0 ? fetchMatchedJobs() : fetchAllJobs()}
           >
             Refresh
+        <NaturalLanguageSearch onSearch={handleNaturalLanguageSearch} />
+            
           </Button>
           <Button
             variant="outlined"
