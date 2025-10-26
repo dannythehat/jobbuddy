@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+coverage
+
+# Development files
+.vscode
+.idea
+*.log
+
+# Build artifacts
+dist
+build
+
+# Uploads and logs
+uploads
+logs
+*.log
