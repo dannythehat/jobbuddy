@@ -13,6 +13,8 @@ import jobsRoutes from './routes/jobsRoutes';
 import automationRoutes from './routes/automationRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
 import naturalLanguageRoutes from './routes/naturalLanguageRoutes';
+import jobBoardRoutes from './routes/jobBoardRoutes';
+import oauthRoutes from './routes/oauthRoutes';
 
 // Create Express app
 const app = express();
@@ -38,20 +40,22 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Consolidated API Routes (Phase 6.1: Added Natural Language)
+// Consolidated API Routes (Phase 7: Added Job Board OAuth)
 app.use('/api/auth', authRoutes);           // Authentication
 app.use('/api/profile', profileRoutes);     // Users + CVs + Certificates
 app.use('/api/jobs', jobsRoutes);           // Jobs + Preferences + Applications
 app.use('/api/automation', automationRoutes); // Responses + Interviews
 app.use('/api/analytics', analyticsRoutes);  // Dashboard + Insights
 app.use('/api/nl', naturalLanguageRoutes);   // Phase 6.1: Natural Language Search
+app.use('/api/job-boards', jobBoardRoutes);  // Phase 7: Job Board Integration
+app.use('/api/oauth', oauthRoutes);          // Phase 7: OAuth Management
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'success',
     message: 'JobBuddi API is running',
-    version: '2.1.0-phase6.1',
+    version: '2.2.0-phase7',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     endpoints: {
@@ -60,7 +64,9 @@ app.get('/api/health', (req: Request, res: Response) => {
       jobs: '/api/jobs', 
       automation: '/api/automation',
       analytics: '/api/analytics',
-      naturalLanguage: '/api/nl'
+      naturalLanguage: '/api/nl',
+      jobBoards: '/api/job-boards',
+      oauth: '/api/oauth'
     }
   });
 });
@@ -70,8 +76,8 @@ app.get('/api/docs', (req: Request, res: Response) => {
   res.json({
     status: 'success',
     documentation: {
-      title: 'JobBuddi API v2.1 - Phase 6.1',
-      description: 'Enhanced API with Natural Language Job Search capabilities',
+      title: 'JobBuddi API v2.2 - Phase 7',
+      description: 'Enhanced API with Job Board OAuth Integration',
       endpoints: {
         '/api/auth': {
           description: 'Authentication and authorization',
@@ -100,6 +106,23 @@ app.get('/api/docs', (req: Request, res: Response) => {
             'POST /api/nl/search/natural - "Find remote React jobs in London"',
             'POST /api/nl/search/parse - Parse query without searching',
             'GET /api/nl/search/suggestions - Get search examples'
+          ]
+        },
+        '/api/job-boards': {
+          description: 'Phase 7: Job Board Integration',
+          methods: ['GET /providers', 'GET /connections', 'POST /connect', 'DELETE /connections/:id'],
+          examples: [
+            'GET /api/job-boards/providers - List all supported job boards',
+            'GET /api/job-boards/connections - Get user connections',
+            'POST /api/job-boards/connect - Connect to a job board'
+          ]
+        },
+        '/api/oauth': {
+          description: 'Phase 7: OAuth Management',
+          methods: ['GET /authorize/:provider', 'GET /callback/:provider', 'POST /refresh'],
+          examples: [
+            'GET /api/oauth/authorize/linkedin - Start LinkedIn OAuth flow',
+            'GET /api/oauth/callback/linkedin - OAuth callback handler'
           ]
         }
       }
