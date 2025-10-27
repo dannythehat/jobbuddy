@@ -1,6 +1,7 @@
 // Phase 7.1.1: Enhanced LinkedIn Job Board Client
 import { EnhancedBaseJobBoardClient } from './EnhancedBaseClient';
 import { JobBoardJob, JobBoardSearchParams } from '../../types/jobBoard';
+import { log } from '../../utils/logger';
 
 export class LinkedInClient extends EnhancedBaseJobBoardClient {
   constructor() {
@@ -8,10 +9,13 @@ export class LinkedInClient extends EnhancedBaseJobBoardClient {
       maxRequestsPerMinute: 30,
       maxRequestsPerHour: 500
     });
+    log.info('LinkedInClient initialized');
   }
 
   async fetchJobs(params: JobBoardSearchParams, accessToken: string): Promise<JobBoardJob[]> {
     try {
+      log.info('Fetching jobs from LinkedIn', { params });
+      
       const searchParams = new URLSearchParams();
       
       if (params.query) searchParams.append('keywords', params.query);
@@ -26,20 +30,23 @@ export class LinkedInClient extends EnhancedBaseJobBoardClient {
       const response = await this.makeRequestWithRetry<any>(endpoint, accessToken);
       
       const jobs = response.elements || response.jobs || [];
+      log.info('Jobs fetched successfully', { count: jobs.length });
+      
       return jobs.map((job: any) => this.normalizeLinkedInJob(job));
-    } catch (error) {
-      console.error('LinkedIn job fetch error:', error);
+    } catch (error: any) {
+      log.error('LinkedIn job fetch error', { error: error.message, params });
       throw error;
     }
   }
 
   async getJobDetails(jobId: string, accessToken: string): Promise<JobBoardJob | null> {
     try {
+      log.info('Fetching job details', { jobId });
       const endpoint = `/jobs/${jobId}`;
       const job = await this.makeRequestWithRetry<any>(endpoint, accessToken);
       return this.normalizeLinkedInJob(job);
-    } catch (error) {
-      console.error('LinkedIn job details error:', error);
+    } catch (error: any) {
+      log.error('LinkedIn job details error', { jobId, error: error.message });
       return null;
     }
   }
@@ -47,8 +54,10 @@ export class LinkedInClient extends EnhancedBaseJobBoardClient {
   async validateToken(accessToken: string): Promise<boolean> {
     try {
       await this.makeRequestWithRetry<any>('/me', accessToken);
+      log.info('Token validated successfully');
       return true;
     } catch (error) {
+      log.warn('Token validation failed');
       return false;
     }
   }
