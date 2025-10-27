@@ -2,6 +2,7 @@
 import { JobBoardJob, JobBoardSearchParams } from '../types/jobBoard';
 import { LinkedInClient } from './jobBoard/LinkedInClient';
 import pool from '../config/database';
+import { log } from '../utils/logger';
 
 interface SyncResult {
   success: boolean;
@@ -17,9 +18,12 @@ export class JobBoardSyncService {
   constructor() {
     this.clients = new Map();
     this.clients.set('linkedin', new LinkedInClient());
+    log.info('JobBoardSyncService initialized', { providers: ['linkedin'] });
   }
 
   async syncJobsForUser(userId: string, searchParams?: JobBoardSearchParams): Promise<SyncResult> {
+    log.info('Starting sync for user', { userId, searchParams });
+    
     const result: SyncResult = {
       success: true,
       jobsFetched: 0,
@@ -35,6 +39,8 @@ export class JobBoardSyncService {
         WHERE user_id = $1 AND connection_status = 'active'
       `;
       const { rows: connections } = await pool.query(connectionsQuery, [userId]);
+      
+      log.info('Found active connections', { userId, count: connections.length });
 
       for (const connection of connections) {
         try {
@@ -49,6 +55,10 @@ export class JobBoardSyncService {
           result.jobsStored += syncResult.jobsStored;
           result.duplicatesSkipped += syncResult.duplicatesSkipped;
         } catch (error: any) {
+          log.error('Provider sync failed', { 
+            providerId: connection.provider_id, 
+            error: error.message 
+          });
           result.errors.push(`${connection.provider_id}: ${error.message}`);
         }
       }
@@ -56,7 +66,10 @@ export class JobBoardSyncService {
       if (result.errors.length > 0) {
         result.success = false;
       }
+      
+      log.info('User sync completed', { userId, result });
     } catch (error: any) {
+      log.error('User sync failed', { userId, error: error.message });
       result.success = false;
       result.errors.push(error.message);
     }
@@ -70,6 +83,8 @@ export class JobBoardSyncService {
     accessToken: string,
     searchParams?: JobBoardSearchParams
   ): Promise<SyncResult> {
+    log.info('Starting provider sync', { connectionId, providerId });
+    
     const result: SyncResult = {
       success: true,
       jobsFetched: 0,
@@ -86,11 +101,18 @@ export class JobBoardSyncService {
 
       const jobs = await client.fetchJobs(searchParams || {}, accessToken);
       result.jobsFetched = jobs.length;
+      log.info('Jobs fetched from provider', { providerId, count: jobs.length });
 
       const uniqueJobs = await this.deduplicateJobs(jobs, providerId);
       result.duplicatesSkipped = jobs.length - uniqueJobs.length;
+      log.info('Jobs deduplicated', { 
+        providerId, 
+        unique: uniqueJobs.length, 
+        duplicates: result.duplicatesSkipped 
+      });
 
       result.jobsStored = await this.storeJobs(uniqueJobs, connectionId);
+      log.info('Jobs stored', { providerId, stored: result.jobsStored });
 
       await pool.query(
         'UPDATE user_job_board_connections SET last_sync_at = NOW() WHERE id = $1',
@@ -98,6 +120,11 @@ export class JobBoardSyncService {
       );
 
     } catch (error: any) {
+      log.error('Provider sync failed', { 
+        connectionId, 
+        providerId, 
+        error: error.message 
+      });
       result.success = false;
       result.errors.push(error.message);
     }
@@ -166,7 +193,10 @@ export class JobBoardSyncService {
         
         stored++;
       } catch (error: any) {
-        console.error(`Failed to store job ${job.external_id}:`, error.message);
+        log.error('Failed to store job', { 
+          externalId: job.external_id, 
+          error: error.message 
+        });
       }
     }
 
