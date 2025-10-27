@@ -1,0 +1,35 @@
+// Patch for backend/src/controllers/applicationController.ts
+// Add this code after line 237 (after const job = await Job.findByPk(jobId);)
+
+// CREATE JOB SNAPSHOT - Preserve complete job data at apply-time
+const jobSnapshot = {
+  title: job.title,
+  company: job.company,
+  location: job.location,
+  salaryMin: job.salaryMin,
+  salaryMax: job.salaryMax,
+  description: job.description,
+  requirements: job.requirements,
+  jobType: job.jobType,
+  remote: job.remote,
+  url: job.url,
+  postedDate: job.postedDate,
+  skillsRequired: job.skillsRequired
+};
+
+// Then update the Application.create call (around line 280) to include jobSnapshot:
+const application = await Application.create({
+  userId,
+  jobId,
+  cvId,
+  status: 'draft',
+  notes,
+  applicationMethod,
+  referralSource,
+  jobBoardUrl,
+  jobBoardId,
+  jobSnapshot,  // ADD THIS LINE
+  statusHistory,
+  communications: [],
+  followUpDates: []
+});
