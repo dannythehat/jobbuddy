@@ -1,15 +1,43 @@
 # 📚 Documentation Index
 
 ## 🎯 Start Here
-**[START-HERE.md](START-HERE.md)** - Choose your next task (15 min to 3.5 hours)
+**[ASSESSMENT-COMPLETE.md](ASSESSMENT-COMPLETE.md)** ⭐ **NEW - READ THIS FIRST**
+
+---
+
+## 🚨 Action Required (5 minutes)
+**[PHASE-6.1-FIX-NEEDED.md](PHASE-6.1-FIX-NEEDED.md)** - Quick fix before GCP migration
+
+---
+
+## 📊 Status Reports
+- **[GCP-READINESS-ASSESSMENT.md](GCP-READINESS-ASSESSMENT.md)** - Complete readiness analysis
+- **[STATUS-REPORT.md](STATUS-REPORT.md)** - Current state & issues
+- **[START-HERE.md](START-HERE.md)** - Choose your next task
 
 ---
 
 ## 📋 Next Steps (Small Chunks)
 
 1. **[NEXT-STEPS.md](NEXT-STEPS.md)** - Phase 7 integration (15 min)
-2. **[NEXT-STEPS-PHASE-6.1.md](NEXT-STEPS-PHASE-6.1.md)** - NL search UI (75 min)
+2. **[NEXT-STEPS-PHASE-6.1.md](NEXT-STEPS-PHASE-6.1.md)** - NL search UI (5 min)
 3. **[NEXT-STEPS-PHASE-7.1.1.md](NEXT-STEPS-PHASE-7.1.1.md)** - Job fetching (3.5 hours)
+
+---
+
+## 🚀 GCP Migration Guide
+**[BUILD-INDEX.md](BUILD-INDEX.md)** - Master guide for GCP migration
+
+### GCP Documentation
+1. **[GCP-MERGE.md](GCP-MERGE.md)** - Vision & strategy
+2. **[GCP-INFRASTRUCTURE.md](GCP-INFRASTRUCTURE.md)** - Infrastructure setup
+3. **[GCP-DEPLOYMENT.md](GCP-DEPLOYMENT.md)** - Deployment guide
+4. **[DATABASE-SCHEMA.md](DATABASE-SCHEMA.md)** - Database changes
+5. **[BACKEND-STRUCTURE.md](BACKEND-STRUCTURE.md)** - Backend code
+6. **[FRONTEND-COMPONENTS.md](FRONTEND-COMPONENTS.md)** - Frontend code
+7. **[FEATURE-ROADMAP.md](FEATURE-ROADMAP.md)** - Feature timeline
+8. **[IMPLEMENTATION-STEPS.md](IMPLEMENTATION-STEPS.md)** - Daily tasks
+9. **[TESTING-VALIDATION.md](TESTING-VALIDATION.md)** - QA checklist
 
 ---
 
@@ -57,14 +85,13 @@
 - Phase 7.1 Backend: OAuth System
 - All Critical Bugs Fixed
 
-### 🔄 In Progress
-- Phase 6.1 Frontend: NL Search UI
-- Phase 7 Integration: Routes & Migration
+### ⚠️ Needs 5-Minute Fix
+- Phase 6.1 Frontend: NL Search Integration
 
 ### 📅 Next Up
+- GCP Migration (Week 1-8)
 - Phase 7.1.1: Job Fetching
 - Phase 7.1.2: Multi-Platform Search
-- Phase 7.1.3: Frontend UI
 
 ---
 
@@ -93,6 +120,16 @@ curl http://localhost:3001/api/health
 # Run migrations
 psql -U postgres -d jobbuddy -f migrations/007_job_board_integrations.sql
 ```
+
+---
+
+## 📌 Quick Navigation
+
+**Need to:**
+- **Start now?** → [ASSESSMENT-COMPLETE.md](ASSESSMENT-COMPLETE.md)
+- **Fix Phase 6.1?** → [PHASE-6.1-FIX-NEEDED.md](PHASE-6.1-FIX-NEEDED.md)
+- **Start GCP?** → [BUILD-INDEX.md](BUILD-INDEX.md)
+- **Check status?** → [GCP-READINESS-ASSESSMENT.md](GCP-READINESS-ASSESSMENT.md)
 
 ---
 
