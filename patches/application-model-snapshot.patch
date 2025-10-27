@@ -1,0 +1,31 @@
+// Patch for backend/src/models/Application.ts
+
+// 1. Add to ApplicationAttributes interface (after line 48, after jobBoardId):
+  
+  // Job snapshot - preserves complete job data at apply-time
+  jobSnapshot?: {
+    title: string;
+    company: string;
+    location: string;
+    salaryMin?: number;
+    salaryMax?: number;
+    description: string;
+    requirements: string;
+    jobType: string;
+    remote: boolean;
+    url?: string;
+    postedDate?: Date;
+    skillsRequired?: string[];
+  };
+
+// 2. Add to Application class (after line 98, after jobBoardId):
+
+  // Job snapshot
+  public jobSnapshot?: object;
+
+// 3. Add to Application.init() (after line 195, before userId):
+
+    // Job snapshot - preserves complete job data at apply-time
+    jobSnapshot: {
+      type: DataTypes.JSONB,
+    },
