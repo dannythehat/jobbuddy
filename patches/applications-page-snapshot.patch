@@ -1,0 +1,37 @@
+// Patch for frontend/src/pages/ApplicationsPage.tsx
+
+// 1. Import Chip component (add to existing Material-UI imports):
+import { Chip } from '@mui/material';
+
+// 2. In the application rendering logic, update job display:
+
+// Use snapshot if job was deleted
+const displayJob = application.job || application.jobSnapshot;
+
+// 3. Add "Job Removed" indicator in the job title area:
+
+<Typography variant="h6">
+  {displayJob?.title}
+  {!application.job && application.jobSnapshot && (
+    <Chip 
+      label="Job Removed" 
+      size="small" 
+      color="warning" 
+      sx={{ ml: 1 }}
+    />
+  )}
+</Typography>
+
+// 4. Display company and location from snapshot:
+
+<Typography color="text.secondary">
+  {displayJob?.company} • {displayJob?.location}
+</Typography>
+
+// 5. Optionally add a note about historical data:
+
+{!application.job && application.jobSnapshot && (
+  <Alert severity="info" sx={{ mt: 1 }}>
+    This job posting is no longer available. Showing saved information from when you applied.
+  </Alert>
+)}
