@@ -1,0 +1,35 @@
+// Patch for frontend/src/pages/JobsPage.tsx
+
+// 1. Import JobSummary component (add to imports):
+import JobSummary from '../components/JobSummary';
+
+// 2. Add JobSummary component in the job card rendering:
+
+// Example integration in a job card:
+<Card>
+  <CardContent>
+    <Typography variant="h6">{job.title}</Typography>
+    <Typography color="text.secondary">
+      {job.company} • {job.location}
+    </Typography>
+    
+    {/* ADD AI SUMMARY HERE */}
+    <JobSummary jobId={job.id} />
+    
+    <Typography variant="body2" sx={{ mt: 2 }}>
+      {job.description}
+    </Typography>
+    
+    {/* Rest of job card content */}
+  </CardContent>
+</Card>
+
+// Alternative: Add as expandable section
+<Accordion>
+  <AccordionSummary>
+    <Typography>AI Summary</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <JobSummary jobId={job.id} />
+  </AccordionDetails>
+</Accordion>
