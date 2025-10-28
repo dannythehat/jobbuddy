@@ -1,5 +1,7 @@
 import express from 'express';
 import { Request, Response } from 'express';
+import { jobSummarizerService } from '../services/jobSummarizerService';
+import { Job } from '../models/Job';
 
 const router = express.Router();
 
@@ -49,6 +51,41 @@ router.post('/search', async (req: Request, res: Response) => {
     res.status(500).json({
       status: 'error',
       message: 'Job search failed'
+    });
+  }
+});
+
+// POST /api/jobs/:jobId/summarize - Generate AI summary for job
+router.post('/:jobId/summarize', async (req: Request, res: Response) => {
+  try {
+    const { jobId } = req.params;
+    
+    // Fetch job from database
+    const job = await Job.findByPk(jobId);
+    
+    if (!job) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Job not found'
+      });
+    }
+
+    // Generate summary using AI
+    const summary = await jobSummarizerService.summarizeJob(job.description);
+    
+    res.json({
+      status: 'success',
+      data: {
+        jobId,
+        summary,
+        generatedAt: new Date().toISOString()
+      }
+    });
+  } catch (error: any) {
+    console.error('Error generating job summary:', error);
+    res.status(500).json({
+      status: 'error',
+      message: error.message || 'Failed to generate job summary'
     });
   }
 });
