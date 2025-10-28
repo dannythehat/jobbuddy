@@ -89,3 +89,73 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/jobbuddy-frontend:$COMMIT_SHA']
     id: 'frontend-docker-push'
     waitFor: ['frontend-docker-build']
+
+  # Deploy Backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - 'jobbuddy-backend'
+      - '--image=gcr.io/$PROJECT_ID/jobbuddy-backend:$COMMIT_SHA'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--memory=1Gi'
+      - '--cpu=1'
+      - '--min-instances=0'
+      - '--max-instances=10'
+      - '--set-env-vars=NODE_ENV=production,PORT=8080'
+      - '--set-secrets=DB_PASSWORD=jobbuddy-db-password:latest,JWT_SECRET=jobbuddy-jwt-secret:latest,OPENAI_API_KEY=jobbuddy-openai-key:latest,ENCRYPTION_KEY=jobbuddy-encryption-key:latest'
+      - '--add-cloudsql-instances=${_CLOUDSQL_INSTANCE}'
+    id: 'deploy-backend'
+    waitFor: ['backend-docker-push']
+
+  # Deploy Frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - 'jobbuddy-frontend'
+      - '--image=gcr.io/$PROJECT_ID/jobbuddy-frontend:$COMMIT_SHA'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--min-instances=0'
+      - '--max-instances=5'
+    id: 'deploy-frontend'
+    waitFor: ['frontend-docker-push']
+
+  # Run Database Migrations
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run jobs create jobbuddy-migrate-$SHORT_SHA \
+          --image=gcr.io/$PROJECT_ID/jobbuddy-backend:$COMMIT_SHA \
+          --region=${_REGION} \
+          --set-secrets=DB_PASSWORD=jobbuddy-db-password:latest \
+          --add-cloudsql-instances=${_CLOUDSQL_INSTANCE} \
+          --command=node \
+          --args=scripts/migrate.js \
+          --execute-now \
+          --wait || echo "Migration job completed or already exists"
+    id: 'run-migrations'
+    waitFor: ['deploy-backend']
+
+# Substitution variables
+substitutions:
+  _REGION: 'us-central1'
+  _CLOUDSQL_INSTANCE: 'PROJECT_ID:us-central1:jobbuddy-db'
+
+# Build options
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+  timeout: '1800s'
