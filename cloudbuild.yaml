@@ -1,0 +1,50 @@
+# Cloud Build Configuration for JobBuddy
+# Builds, tests, and deploys backend and frontend to GCP Cloud Run
+
+steps:
+  # Step 1: Backend - Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    dir: 'backend'
+    id: 'backend-install'
+
+  # Step 2: Backend - Run linting
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'lint']
+    dir: 'backend'
+    id: 'backend-lint'
+    waitFor: ['backend-install']
+
+  # Step 3: Backend - Run tests
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'test']
+    dir: 'backend'
+    id: 'backend-test'
+    waitFor: ['backend-install']
+
+  # Step 4: Backend - Build TypeScript
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+    dir: 'backend'
+    id: 'backend-build'
+    waitFor: ['backend-lint', 'backend-test']
+
+  # Step 5: Backend - Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/jobbuddy-backend:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/jobbuddy-backend:latest'
+      - '-f'
+      - 'backend/Dockerfile'
+      - './backend'
+    id: 'backend-docker-build'
+    waitFor: ['backend-build']
+
+  # Step 6: Backend - Push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/jobbuddy-backend:$COMMIT_SHA']
+    id: 'backend-docker-push'
+    waitFor: ['backend-docker-build']
