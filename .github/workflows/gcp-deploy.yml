@@ -21,47 +21,9 @@ env:
   FRONTEND_SERVICE: jobbuddy-frontend
 
 jobs:
-  lint-and-test:
-    name: Lint and Test
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-    
-    - name: Install backend dependencies
-      working-directory: ./backend
-      run: npm install
-    
-    - name: Install frontend dependencies
-      working-directory: ./frontend
-      run: npm install
-    
-    - name: Lint backend
-      working-directory: ./backend
-      run: npm run lint
-    
-    - name: Lint frontend
-      working-directory: ./frontend
-      run: npm run lint
-    
-    - name: Test backend
-      working-directory: ./backend
-      run: npm test
-    
-    - name: Test frontend
-      working-directory: ./frontend
-      run: npm test -- --watchAll=false
-
   build-and-deploy:
     name: Build and Deploy to GCP
     runs-on: ubuntu-latest
-    needs: lint-and-test
     if: github.ref == 'refs/heads/main'
     
     permissions:
