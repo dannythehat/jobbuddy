@@ -1,0 +1,187 @@
+name: Deploy to GCP Cloud Run
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  PROJECT_ID: algebraic-link-476405-e9
+  REGION: europe-west1
+  BACKEND_SERVICE: jobbuddy-backend
+  FRONTEND_SERVICE: jobbuddy-frontend
+
+jobs:
+  lint-and-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: |
+          backend/package-lock.json
+          frontend/package-lock.json
+    
+    - name: Install backend dependencies
+      working-directory: ./backend
+      run: npm ci
+    
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+    
+    - name: Lint backend
+      working-directory: ./backend
+      run: npm run lint
+    
+    - name: Lint frontend
+      working-directory: ./frontend
+      run: npm run lint
+    
+    - name: Test backend
+      working-directory: ./backend
+      run: npm test
+    
+    - name: Test frontend
+      working-directory: ./frontend
+      run: npm test -- --watchAll=false
+
+  build-and-deploy:
+    name: Build and Deploy to GCP
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main'
+    
+    permissions:
+      contents: read
+      id-token: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+    
+    - name: Configure Docker for GCR
+      run: |
+        gcloud auth configure-docker gcr.io
+    
+    - name: Build backend Docker image
+      run: |
+        docker build \
+          -t gcr.io/${{ env.PROJECT_ID }}/${{ env.BACKEND_SERVICE }}:${{ github.sha }} \
+          -t gcr.io/${{ env.PROJECT_ID }}/${{ env.BACKEND_SERVICE }}:latest \
+          -f backend/Dockerfile \
+          ./backend
+    
+    - name: Build frontend Docker image
+      run: |
+        docker build \
+          -t gcr.io/${{ env.PROJECT_ID }}/${{ env.FRONTEND_SERVICE }}:${{ github.sha }} \
+          -t gcr.io/${{ env.PROJECT_ID }}/${{ env.FRONTEND_SERVICE }}:latest \
+          --build-arg REACT_APP_API_URL=https://${{ env.BACKEND_SERVICE }}-${{ hashFiles('backend/**') }}.a.run.app \
+          -f frontend/Dockerfile \
+          ./frontend
+    
+    - name: Push backend image to GCR
+      run: |
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.BACKEND_SERVICE }}:${{ github.sha }}
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.BACKEND_SERVICE }}:latest
+    
+    - name: Push frontend image to GCR
+      run: |
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.FRONTEND_SERVICE }}:${{ github.sha }}
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.FRONTEND_SERVICE }}:latest
+    
+    - name: Deploy backend to Cloud Run
+      run: |
+        gcloud run deploy ${{ env.BACKEND_SERVICE }} \
+          --image gcr.io/${{ env.PROJECT_ID }}/${{ env.BACKEND_SERVICE }}:${{ github.sha }} \
+          --region ${{ env.REGION }} \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --memory 1Gi \
+          --cpu 1 \
+          --min-instances 0 \
+          --max-instances 10 \
+          --timeout 300 \
+          --set-env-vars NODE_ENV=production,PORT=8080 \
+          --set-secrets DB_PASSWORD=jobbuddy-db-password:latest,JWT_SECRET=jobbuddy-jwt-secret:latest,OPENAI_API_KEY=jobbuddy-openai-key:latest,ENCRYPTION_KEY=jobbuddy-encryption-key:latest
+    
+    - name: Get backend URL
+      id: backend-url
+      run: |
+        BACKEND_URL=$(gcloud run services describe ${{ env.BACKEND_SERVICE }} \
+          --region ${{ env.REGION }} \
+          --format 'value(status.url)')
+        echo "url=$BACKEND_URL" >> $GITHUB_OUTPUT
+        echo "Backend URL: $BACKEND_URL"
+    
+    - name: Deploy frontend to Cloud Run
+      run: |
+        gcloud run deploy ${{ env.FRONTEND_SERVICE }} \
+          --image gcr.io/${{ env.PROJECT_ID }}/${{ env.FRONTEND_SERVICE }}:${{ github.sha }} \
+          --region ${{ env.REGION }} \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --memory 512Mi \
+          --cpu 1 \
+          --min-instances 0 \
+          --max-instances 5 \
+          --timeout 60 \
+          --set-env-vars REACT_APP_API_URL=${{ steps.backend-url.outputs.url }}
+    
+    - name: Get frontend URL
+      id: frontend-url
+      run: |
+        FRONTEND_URL=$(gcloud run services describe ${{ env.FRONTEND_SERVICE }} \
+          --region ${{ env.REGION }} \
+          --format 'value(status.url)')
+        echo "url=$FRONTEND_URL" >> $GITHUB_OUTPUT
+        echo "Frontend URL: $FRONTEND_URL"
+    
+    - name: Verify backend health
+      run: |
+        sleep 10
+        curl -f ${{ steps.backend-url.outputs.url }}/health || echo "Backend health check failed"
+    
+    - name: Verify frontend health
+      run: |
+        sleep 5
+        curl -f ${{ steps.frontend-url.outputs.url }}/health || echo "Frontend health check failed"
+    
+    - name: Deployment summary
+      run: |
+        echo "🚀 Deployment Complete!"
+        echo "================================"
+        echo "Backend:  ${{ steps.backend-url.outputs.url }}"
+        echo "Frontend: ${{ steps.frontend-url.outputs.url }}"
+        echo "================================"
+        echo "Commit: ${{ github.sha }}"
+        echo "Branch: ${{ github.ref_name }}"
