@@ -1,5 +1,6 @@
 # Cloud Build Configuration for JobBuddy
 # Builds, tests, and deploys backend and frontend to GCP Cloud Run
+# Region: Belgium (europe-west1)
 
 steps:
   # Backend Steps
@@ -149,10 +150,10 @@ steps:
     id: 'run-migrations'
     waitFor: ['deploy-backend']
 
-# Substitution variables
+# Substitution variables - BELGIAN REGION
 substitutions:
-  _REGION: 'us-central1'
-  _CLOUDSQL_INSTANCE: 'PROJECT_ID:us-central1:jobbuddy-db'
+  _REGION: 'europe-west1'
+  _CLOUDSQL_INSTANCE: 'PROJECT_ID:europe-west1:jobbuddy-db'
 
 # Build options
 options:
