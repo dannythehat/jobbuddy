@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -23,6 +24,19 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     acquire: 30000,
     idle: 10000,
   },
+});
+
+// Create pg Pool instance for raw queries
+export const pool = new Pool({
+  host: dbHost,
+  port: dbPort,
+  database: dbName,
+  user: dbUser,
+  password: dbPassword,
+  max: 5,
+  min: 0,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 30000,
 });
 
 // Test database connection
