@@ -39,17 +39,25 @@ export const pool = new Pool({
   connectionTimeoutMillis: 30000,
 });
 
-// Test database connection
+// Track database connection status
+export let isDbConnected = false;
+
+// Test database connection (non-blocking)
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Database connection established successfully.');
+    isDbConnected = true;
+    console.log('✅ Database connection established successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    isDbConnected = false;
+    console.warn('⚠️  Database connection failed - app will run in limited mode:', error instanceof Error ? error.message : error);
+    console.warn('⚠️  Some features requiring database access will be unavailable.');
   }
 };
 
-// Call the test connection function
-testConnection();
+// Call the test connection function (non-blocking)
+testConnection().catch(err => {
+  console.warn('Database connection test failed:', err);
+});
 
 export default sequelize;
