@@ -1,0 +1,2 @@
+# JobBuddy – AI Builder Pack
+Goal: Backend compiles (0 TS errors) and runs; frontend already OK. Follow ASSOCIATIONS_SPEC.md → CONTROLLERS_FIX.md → SERVICES_FIX.md → SMOKE_TESTS.md. Open PR fix/backend-compile with logs.
