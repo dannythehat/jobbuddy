@@ -51,7 +51,8 @@ import {
   Warning as WarningIcon,
   CalendarToday as CalendarTodayIcon,
 } from '@mui/icons-material';
-import { format, parseISO, isAfter, isBefore, addDays } from 'date-fns';
+import { format, isAfter, isBefore, addDays } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 
 interface Interview {
   id: string;

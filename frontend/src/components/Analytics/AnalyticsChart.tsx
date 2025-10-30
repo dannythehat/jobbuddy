@@ -83,7 +83,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
         );
       
       default:
-        return null;
+        return <div />;
     }
   };
 

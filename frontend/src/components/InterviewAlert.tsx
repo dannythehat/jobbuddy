@@ -38,7 +38,7 @@ import {
   Phone as PhoneIcon,
   Business as BusinessIcon,
   Close as CloseIcon,
-  Calendar as CalendarIcon,
+  CalendarMonth as CalendarIcon,
   Email as EmailIcon,
   Warning as WarningIcon,
   CheckCircle as CheckCircleIcon,
@@ -46,7 +46,8 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 
 interface InterviewAlertProps {
   open: boolean;
@@ -600,3 +601,4 @@ const InterviewAlert: React.FC<InterviewAlertProps> = ({
 };
 
 export default InterviewAlert;
+

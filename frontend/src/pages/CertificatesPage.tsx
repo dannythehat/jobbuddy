@@ -698,7 +698,7 @@ const CertificatesPage: React.FC = () => {
                   </Button>
                   <Button
                     size="small"
-                    color={certificate.isVerified ? "default" : "success"}
+                    color={certificate.isVerified ? "error" : "success"}
                     startIcon={certificate.isVerified ? <CancelIcon /> : <CheckCircleIcon />}
                     onClick={() => handleVerifyCertificate(certificate.id, !certificate.isVerified)}
                   >
