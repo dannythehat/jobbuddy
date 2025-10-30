@@ -5,9 +5,9 @@
 # JobBuddi
 *Your AI-Powered Career Assistant* 🤖
 
-[![Production Ready](https://img.shields.io/badge/Status-PRODUCTION%20READY-brightgreen)](docs/roadmap.md)
-[![Phase 6.1](https://img.shields.io/badge/Phase-6.1%20IN%20PROGRESS-orange)](docs/roadmap.md)
-[![All Bugs Fixed](https://img.shields.io/badge/Bugs-0%20Open-brightgreen)](BUGFIXES.md)
+[![Production Ready](https://img.shields.io/badge/Status-PRODUCTION%20READY-brightgreen)](PROJECT-STATUS.md)
+[![Phase 6.1](https://img.shields.io/badge/Phase-6.1%20IN%20PROGRESS-orange)](PROJECT-STATUS.md)
+[![All Bugs Fixed](https://img.shields.io/badge/Bugs-0%20Open-brightgreen)](PROJECT-STATUS.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](backend/package.json)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](docker-compose.prod.yml)
@@ -42,10 +42,6 @@ An intelligent job application automation platform that streamlines your entire 
 git clone https://github.com/dannythehat/jobbuddy.git
 cd jobbuddy
 
-# Make setup script executable and run
-chmod +x scripts/setup-dev.sh
-./scripts/setup-dev.sh
-
 # Configure environment variables
 cp backend/.env.example backend/.env
 # Edit backend/.env with your database and API credentials
@@ -65,13 +61,9 @@ cd frontend && npm start
 ```bash
 # Using Docker Compose (Recommended)
 docker-compose -f docker-compose.prod.yml up -d
-
-# Manual deployment
-npm run build
-npm run start
 ```
 
-📖 **[Full Setup Guide](docs/setup.md)** | 🏗️ **[Architecture](docs/architecture.md)** | 🛣️ **[Roadmap](docs/roadmap.md)** | 🚀 **[Deployment](docs/deployment.md)**
+📖 **[Development Guide](DEVELOPMENT.md)** | 🚀 **[Deployment Guide](DEPLOYMENT.md)** | 📊 **[Project Status](PROJECT-STATUS.md)** | 🤖 **[AI Context](CONTEXT.md)**
 
 ## 🎯 Current Status
 
@@ -80,20 +72,18 @@ npm run start
 - High-performance caching and optimization systems
 - Docker containerization with full orchestration
 - Production monitoring with health checks and metrics
-- Complete CI/CD pipeline with automated deployment
 
 🔄 **Phase 6.1 IN PROGRESS - Natural Language Job Search**
 - ✅ **Stage 1: Backend Integration COMPLETE**
-  - ✅ Step 1.1: Connected NL controller to real Job database
-  - ✅ Step 1.2: Enhanced search query builder with improved OpenAI prompts
-  - ✅ Step 1.3: Backend API endpoints tested and documented
+  - Backend API endpoints tested and documented
 - ⏳ **Stage 2: Frontend UI** (Next)
-  - Step 2.1: Add NL search input to JobsPage
-  - Step 2.2: Create search suggestions component
-  - Step 2.3: Display parsed query feedback
-  - Step 2.4: Show search results
+  - Add NL search input to JobsPage
+  - Create search suggestions component
+  - Display parsed query feedback
 
 **Latest Achievement:** Natural language backend fully operational with AI-powered query parsing! 🎉
+
+See [PROJECT-STATUS.md](PROJECT-STATUS.md) for detailed current status and next steps.
 
 ## 🛠️ Tech Stack
 
@@ -114,13 +104,14 @@ npm run start
 
 ## 📚 Documentation
 
-- 📖 **[Setup Guide](docs/setup.md)** - Installation & configuration
-- 🏗️ **[Architecture](docs/architecture.md)** - System design & structure  
-- 🔌 **[API Reference](docs/api.md)** - Complete endpoint documentation
-- ✨ **[Features](docs/features.md)** - Detailed feature breakdown
-- 🛣️ **[Roadmap](docs/roadmap.md)** - Development phases & progress
-- 🚀 **[Deployment](docs/deployment.md)** - Production deployment guide
-- 🤝 **[Contributing](docs/contributing.md)** - How to contribute
+### Essential Guides
+- 📖 **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development setup & workflow
+- 🚀 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment guide
+- 📊 **[PROJECT-STATUS.md](PROJECT-STATUS.md)** - Current status & roadmap
+- 🤖 **[CONTEXT.md](CONTEXT.md)** - AI context & project overview
+
+### Additional Documentation
+Detailed documentation is available in the `docs/` directory (archived historical docs in `docs/archive/`).
 
 ## 🚀 Deployment Options
 
@@ -131,7 +122,7 @@ JobBuddi is production-ready with multiple deployment options:
 - **Traditional** - Direct server deployment
 - **Cloud** - AWS, GCP, Azure compatible
 
-See the [Deployment Guide](docs/deployment.md) for detailed instructions.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 ## 🤝 Contributing
 
@@ -143,7 +134,7 @@ We welcome contributions! Please:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-See our [Contributing Guide](docs/contributing.md) for detailed guidelines.
+See [DEVELOPMENT.md](DEVELOPMENT.md) for development guidelines.
 
 ## 📄 License
 
