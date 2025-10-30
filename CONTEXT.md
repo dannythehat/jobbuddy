@@ -29,11 +29,13 @@ An AI-powered job application automation platform built with React, Node.js, Pos
 ### ✅ Cleanup Completed
 - **Branches:** Reduced from 18 to 5 (deleted 13 stale branches)
 - **Documentation:** Created essential guides (DEVELOPMENT.md, DEPLOYMENT.md, AI-WORKFLOW.md)
+- **README Updated:** Now references all new documentation including AI-WORKFLOW.md
 - **Cleanup Script:** Ready to archive old docs (`scripts/cleanup-repo.sh`)
 
 ### 🎯 Active Work
-- **NOW:** Run cleanup script to archive 50+ old docs
-- **NEXT:** Finish Phase 6.1 Stage 2 (Frontend UI for NL search)
+- **NOW:** Run cleanup script locally to archive 50+ old docs (requires local execution)
+- **NEXT:** Close cleanup issue (#19)
+- **THEN:** Finish Phase 6.1 Stage 2 (Frontend UI for NL search)
 - **LATER:** Finalize deployment strategy (GCP vs simpler alternatives)
 
 ---
@@ -85,7 +87,7 @@ cd frontend && npm start
 # Database
 node scripts/init-db.js
 
-# Cleanup (Run this next!)
+# Cleanup (Run this locally!)
 chmod +x scripts/cleanup-repo.sh
 ./scripts/cleanup-repo.sh
 ```
@@ -113,12 +115,15 @@ chmod +x scripts/cleanup-repo.sh
 ## 🎯 Current Priority: Final Cleanup Steps
 
 **Remaining Actions:**
-1. ✅ Delete stale branches (DONE - 13 deleted)
-2. ✅ Create DEVELOPMENT.md (DONE)
-3. ✅ Create DEPLOYMENT.md (DONE)
-4. ⏳ Run cleanup script locally to archive docs
-5. ⏳ Update README.md to reference new structure
-6. ⏳ Close cleanup issue (#19)
+1. ✅ Delete stale branches (DONE - 13 deleted - Commit: 5ddc3e3)
+2. ✅ Create DEVELOPMENT.md (DONE - Commit: 38643dd)
+3. ✅ Create DEPLOYMENT.md (DONE - Commit: 38643dd)
+4. ✅ Create AI-WORKFLOW.md (DONE - Commit: aaa4e8a)
+5. ✅ Update README.md to reference new structure (DONE - Commit: 0d49274)
+6. ⏸️ Run cleanup script locally to archive docs (BLOCKED - Requires local execution)
+7. ⏳ Close cleanup issue (#19)
+
+**Note on Task #6:** The cleanup script (`scripts/cleanup-repo.sh`) must be run locally by Danny to archive 50+ old documentation files. AI cannot execute local bash scripts.
 
 ---
 
@@ -133,6 +138,10 @@ chmod +x scripts/cleanup-repo.sh
 **Branch Management:**
 - ✅ Kept: `main` + 4 feature branches
 - ✅ Deleted: 13 stale/merged branches
+
+**Local Execution:**
+- ⚠️ AI cannot run local bash scripts
+- ✅ Scripts must be executed by user locally
 
 ---
 
@@ -158,8 +167,8 @@ Email: danny@ai-on-auto.com
 ## 📅 Last Updated
 
 **Date:** October 30, 2025  
-**Status:** 🟢 Cleanup 75% complete  
-**Next Action:** Run cleanup script locally to archive old docs
+**Status:** 🟢 Cleanup 85% complete (5/7 tasks done)  
+**Next Action:** Close cleanup issue (#19)
 
 ---
 
