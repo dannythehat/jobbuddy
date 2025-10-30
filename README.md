@@ -109,6 +109,7 @@ See [PROJECT-STATUS.md](PROJECT-STATUS.md) for detailed current status and next 
 - 🚀 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment guide
 - 📊 **[PROJECT-STATUS.md](PROJECT-STATUS.md)** - Current status & roadmap
 - 🤖 **[CONTEXT.md](CONTEXT.md)** - AI context & project overview
+- 🔧 **[AI-WORKFLOW.md](AI-WORKFLOW.md)** - AI assistant standard procedures
 
 ### Additional Documentation
 Detailed documentation is available in the `docs/` directory (archived historical docs in `docs/archive/`).
