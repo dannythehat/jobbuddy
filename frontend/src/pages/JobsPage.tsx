@@ -41,6 +41,7 @@ import {
   Refresh,
   TrendingUp,
 } from '@mui/icons-material';
+import NaturalLanguageSearch from "../components/NaturalLanguageSearch"; // 👈 add here
 
 interface Job {
   id: string;
@@ -67,6 +68,28 @@ interface JobMatch {
 }
 
 const JobsPage: React.FC = () => {
+  // 👉 Natural Language Search state & handler
+const [nlResults, setNlResults] = useState<Job[]>([]);
+const [nlQuery, setNlQuery] = useState<string>("");
+
+const handleNaturalSearch = async (query: string) => {
+  setNlQuery(query);
+  // temporary: simulate results until API is wired in
+  setNlResults([
+    {
+      id: "demo",
+      title: `Mock result for "${query}"`,
+      company: "JobBuddi AI",
+      location: "Remote",
+      jobType: "Demo",
+      description: "Placeholder job returned by NL search stub",
+      postedDate: new Date().toISOString(),
+      applicationUrl: "#",
+      status: "open",
+    },
+  ]);
+};
+
   const [activeTab, setActiveTab] = useState(0);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [matchedJobs, setMatchedJobs] = useState<JobMatch[]>([]);
@@ -228,7 +251,7 @@ const JobsPage: React.FC = () => {
         <Typography variant="h3" component="h1" gutterBottom>
           Job Opportunities
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            </Box>`r`n<Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
           Discover jobs that match your skills and preferences.
         </Typography>
 
@@ -239,32 +262,41 @@ const JobsPage: React.FC = () => {
         )}
 
         {success && (
-          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
-            {success}
-          </Alert>
-        )}
+  <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+    {success}
+  </Alert>
+)}
 
-        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-          <Button
-            variant="outlined"
-            startIcon={<Refresh />}
-            onClick={() => activeTab === 0 ? fetchMatchedJobs() : fetchAllJobs()}
-          >
-            Refresh
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={createSampleJobs}
-          >
-            Create Sample Jobs
-          </Button>
-        </Box>
+{/* Natural Language Search Box */}
+<Box sx={{ mb: 2 }}>
+  <NaturalLanguageSearch onSearch={handleNaturalSearch} />
+  {nlQuery && (
+    <Typography variant="body2" sx={{ mt: 1, color: "text.secondary" }}>
+      Searching for: <strong>{nlQuery}</strong>
+      <span style={{ marginLeft: 8 }}>(demo results showing below)</span>
+    </Typography>
+  )}
+</Box>
 
-        <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
-          <Tab 
-            label="Matched Jobs" 
-            icon={<TrendingUp />} 
-            iconPosition="start"
+<Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+  <Button
+    variant="outlined"
+    startIcon={<Refresh />}
+    onClick={() => (activeTab === 0 ? fetchMatchedJobs() : fetchAllJobs())}
+  >
+    Refresh
+  </Button>
+  <Button variant="outlined" onClick={createSampleJobs}>
+    Create Sample Jobs
+  </Button>
+</Box>
+
+<Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
+  <Tab
+    label="Matched Jobs"
+    icon={<TrendingUp />}
+    iconPosition="start"
+
           />
           <Tab 
             label="All Jobs" 
@@ -272,6 +304,31 @@ const JobsPage: React.FC = () => {
             iconPosition="start"
           />
         </Tabs>
+
+{/* Natural Language Search Results (mock for now) */}
+{nlResults.length > 0 && (
+  <Box sx={{ mb: 3 }}>
+    <Typography variant="h5" gutterBottom>
+      Natural Language Search Results
+    </Typography>
+    {nlResults.map((job) => (
+      <Card key={job.id} sx={{ mb: 2 }}>
+        <CardContent>
+          <Typography variant="h6">{job.title}</Typography>
+          <Typography color="text.secondary">{job.company}</Typography>
+          <Typography>{job.location}</Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            {job.description}
+          </Typography>
+        </CardContent>
+      </Card>
+    ))}
+  </Box>
+)}
+
+<Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+  ...
+
       </Box>
 
       {/* Filters for All Jobs tab */}
@@ -650,3 +707,4 @@ const JobsPage: React.FC = () => {
 };
 
 export default JobsPage;
+
