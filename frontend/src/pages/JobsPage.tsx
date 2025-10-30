@@ -19,23 +19,16 @@ import {
   Tabs,
   Tab,
   LinearProgress,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
 } from '@mui/material';
 import {
   Work,
   LocationOn,
   AttachMoney,
   Business,
-  Star,
-  StarBorder,
   Launch,
   FilterList,
   Refresh,
@@ -104,7 +97,7 @@ const handleNaturalSearch = async (query: string) => {
   const [locationFilter, setLocationFilter] = useState('');
   const [jobTypeFilter, setJobTypeFilter] = useState('');
   const [salaryMinFilter, setSalaryMinFilter] = useState('');
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (activeTab === 0) {
       fetchMatchedJobs();
@@ -220,13 +213,6 @@ const handleNaturalSearch = async (query: string) => {
     if (score >= 0.8) return 'success';
     if (score >= 0.6) return 'warning';
     return 'default';
-  };
-
-  const getMatchScoreText = (score: number) => {
-    if (score >= 0.8) return 'Excellent Match';
-    if (score >= 0.6) return 'Good Match';
-    if (score >= 0.4) return 'Fair Match';
-    return 'Basic Match';
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {

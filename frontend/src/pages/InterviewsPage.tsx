@@ -17,17 +17,13 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-  Alert,
   LinearProgress,
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   Paper,
   Stack,
-  Badge,
   Tooltip,
-  Fab,
 } from '@mui/material';
 import {
   Event as EventIcon,
@@ -112,7 +108,7 @@ const InterviewsPage: React.FC = () => {
     limit: 20,
   });
 
-  const [pagination, setPagination] = useState({
+  const [, setPagination] = useState({
     page: 1,
     limit: 20,
     total: 0,
@@ -127,6 +123,7 @@ const InterviewsPage: React.FC = () => {
     nextSteps: '',
     followUpDate: '',
   });
+// eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     fetchInterviews();
@@ -267,7 +264,7 @@ const InterviewsPage: React.FC = () => {
     return isAfter(parseISO(date), new Date());
   };
 
-  const isPast = (date: string) => {
+  const = (date: string) => {
     return isBefore(parseISO(date), new Date());
   };
 
