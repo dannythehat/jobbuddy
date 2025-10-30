@@ -1,0 +1,33 @@
+// Add this import after the existing imports (around line 43)
+import NaturalLanguageSearch from '../components/NaturalLanguageSearch';
+
+// Add these state variables after line 83 (after salaryMinFilter)
+const [nlSearchResults, setNlSearchResults] = useState<Job[] | null>(null);
+const [showNlResults, setShowNlResults] = useState(false);
+
+// Add this handler function after the clearFilters function (around line 222)
+const handleNlSearch = (results: any) => {
+  setNlSearchResults(results.jobs);
+  setShowNlResults(true);
+  setActiveTab(1); // Switch to "All Jobs" tab to show results
+};
+
+// Add this component before the Tabs component (around line 260, after the buttons)
+{/* Natural Language Search */}
+<NaturalLanguageSearch onSearch={handleNlSearch} />
+
+// Update the job display logic to show NL results when available
+// In the "All Jobs" tab section, wrap the existing job grid with a condition
+{showNlResults && nlSearchResults ? (
+  <>
+    <Alert severity="info" sx={{ mb: 2 }}>
+      Showing {nlSearchResults.length} results from natural language search
+      <Button size="small" onClick={() => { setShowNlResults(false); fetchAllJobs(); }} sx={{ ml: 2 }}>
+        Clear Search
+      </Button>
+    </Alert>
+    {/* Display nlSearchResults */}
+  </>
+) : (
+  {/* Display regular jobs */}
+)}
