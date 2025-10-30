@@ -28,7 +28,7 @@ An AI-powered job application automation platform built with React, Node.js, Pos
 
 ### ✅ Cleanup Completed
 - **Branches:** Reduced from 18 to 5 (deleted 13 stale branches)
-- **Documentation:** Created essential guides (DEVELOPMENT.md, DEPLOYMENT.md)
+- **Documentation:** Created essential guides (DEVELOPMENT.md, DEPLOYMENT.md, AI-WORKFLOW.md)
 - **Cleanup Script:** Ready to archive old docs (`scripts/cleanup-repo.sh`)
 
 ### 🎯 Active Work
@@ -97,6 +97,7 @@ chmod +x scripts/cleanup-repo.sh
 **In Root Directory:**
 - `README.md` - Main project documentation
 - `CONTEXT.md` - This file (AI context)
+- `AI-WORKFLOW.md` - **AI standard operating procedures (READ THIS FIRST!)**
 - `PROJECT-STATUS.md` - Current status and recovery plan
 - `DEVELOPMENT.md` - Development guide
 - `DEPLOYMENT.md` - Deployment guide
@@ -139,6 +140,7 @@ chmod +x scripts/cleanup-repo.sh
 
 - **Repository:** https://github.com/dannythehat/jobbuddy
 - **This File:** https://github.com/dannythehat/jobbuddy/blob/main/CONTEXT.md
+- **AI Workflow:** https://github.com/dannythehat/jobbuddy/blob/main/AI-WORKFLOW.md
 - **Status:** https://github.com/dannythehat/jobbuddy/blob/main/PROJECT-STATUS.md
 - **Development:** https://github.com/dannythehat/jobbuddy/blob/main/DEVELOPMENT.md
 - **Deployment:** https://github.com/dannythehat/jobbuddy/blob/main/DEPLOYMENT.md
@@ -163,8 +165,10 @@ Email: danny@ai-on-auto.com
 
 **🤖 AI Instructions:**
 When helping with this project:
-1. Read this file first for context
-2. Check PROJECT-STATUS.md for current priorities
-3. Make small, incremental file updates only
-4. Document all changes clearly
-5. Focus on one task at a time
+1. **READ AI-WORKFLOW.md FIRST** - Contains standard operating procedures
+2. Read this file for project context
+3. Check PROJECT-STATUS.md for current priorities
+4. Follow numbered task order (never skip ahead)
+5. Make small, incremental file updates only
+6. Document all changes clearly
+7. Focus on one task at a time
