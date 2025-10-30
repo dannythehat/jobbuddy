@@ -26,14 +26,13 @@ An AI-powered job application automation platform built with React, Node.js, Pos
 - **AI Integration:** OpenAI API for CV parsing and NL search
 - **Phase 6.1 Backend:** Natural language search API completed
 
-### 🔴 Current Issues
-- **Documentation Chaos:** 56+ MD files cluttering root directory
-- **Branch Overload:** 18 branches, many stale/merged
-- **GCP Deployment:** Multiple conflicting deployment docs, unclear status
-- **Lost Direction:** Too many "next steps" files, no clear path
+### ✅ Cleanup Completed
+- **Branches:** Reduced from 18 to 5 (deleted 13 stale branches)
+- **Documentation:** Created essential guides (DEVELOPMENT.md, DEPLOYMENT.md)
+- **Cleanup Script:** Ready to archive old docs (`scripts/cleanup-repo.sh`)
 
 ### 🎯 Active Work
-- **NOW:** Repository cleanup and reorganization
+- **NOW:** Run cleanup script to archive 50+ old docs
 - **NEXT:** Finish Phase 6.1 Stage 2 (Frontend UI for NL search)
 - **LATER:** Finalize deployment strategy (GCP vs simpler alternatives)
 
@@ -86,39 +85,39 @@ cd frontend && npm start
 # Database
 node scripts/init-db.js
 
-# Cleanup (NEW)
+# Cleanup (Run this next!)
 chmod +x scripts/cleanup-repo.sh
 ./scripts/cleanup-repo.sh
 ```
 
 ---
 
-## 📝 Key Documentation Files
+## 📝 Essential Documentation
 
-**Essential (Keep in root):**
+**In Root Directory:**
 - `README.md` - Main project documentation
 - `CONTEXT.md` - This file (AI context)
 - `PROJECT-STATUS.md` - Current status and recovery plan
+- `DEVELOPMENT.md` - Development guide
+- `DEPLOYMENT.md` - Deployment guide
 - `LICENSE` - MIT license
 
-**Archived (Moving to docs/archive/):**
-- All status reports, fix summaries, deployment attempts
-- Phase work documentation
+**To Be Archived:**
+- 50+ status reports, fix summaries, deployment attempts
 - Old "next steps" files
+- Phase work documentation
 
 ---
 
-## 🎯 Current Priority: Repository Cleanup
+## 🎯 Current Priority: Final Cleanup Steps
 
-**Goal:** Reduce root directory from 56+ files to <10 essential files
-
-**Actions:**
-1. ✅ Created cleanup script (`scripts/cleanup-repo.sh`)
-2. ⏳ Create CONTEXT.md (this file)
-3. ⏳ Archive old documentation
-4. ⏳ Delete stale branches
-5. ⏳ Create simple DEVELOPMENT.md guide
-6. ⏳ Create simple DEPLOYMENT.md guide
+**Remaining Actions:**
+1. ✅ Delete stale branches (DONE - 13 deleted)
+2. ✅ Create DEVELOPMENT.md (DONE)
+3. ✅ Create DEPLOYMENT.md (DONE)
+4. ⏳ Run cleanup script locally to archive docs
+5. ⏳ Update README.md to reference new structure
+6. ⏳ Close cleanup issue (#19)
 
 ---
 
@@ -131,9 +130,8 @@ chmod +x scripts/cleanup-repo.sh
 - ✅ Use multiple commits for large changes
 
 **Branch Management:**
-- Keep: `main`, active feature branches only
-- Delete: All `phase-6.1-step-*` branches (work merged)
-- Delete: Stale feature branches
+- ✅ Kept: `main` + 4 feature branches
+- ✅ Deleted: 13 stale/merged branches
 
 ---
 
@@ -142,6 +140,8 @@ chmod +x scripts/cleanup-repo.sh
 - **Repository:** https://github.com/dannythehat/jobbuddy
 - **This File:** https://github.com/dannythehat/jobbuddy/blob/main/CONTEXT.md
 - **Status:** https://github.com/dannythehat/jobbuddy/blob/main/PROJECT-STATUS.md
+- **Development:** https://github.com/dannythehat/jobbuddy/blob/main/DEVELOPMENT.md
+- **Deployment:** https://github.com/dannythehat/jobbuddy/blob/main/DEPLOYMENT.md
 - **Issues:** https://github.com/dannythehat/jobbuddy/issues
 
 ---
@@ -156,8 +156,8 @@ Email: danny@ai-on-auto.com
 ## 📅 Last Updated
 
 **Date:** October 30, 2025  
-**Status:** 🔴 Cleanup in progress  
-**Next Action:** Run cleanup script and archive old docs
+**Status:** 🟢 Cleanup 75% complete  
+**Next Action:** Run cleanup script locally to archive old docs
 
 ---
 
