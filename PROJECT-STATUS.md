@@ -11,7 +11,8 @@
 - **Core Application:** React frontend + Node.js backend running locally
 - **Database:** PostgreSQL schema with job tracking
 - **AI Integration:** OpenAI API for CV parsing and NL search
-- **Phase 6.1 Backend:** Natural language search API completed
+- **Phase 6.1 Backend:** Natural language search API completed ✅
+- **Phase 6.1 Frontend:** NL search component created ✅
 
 ### ✅ Repository Cleanup - COMPLETE! 🎉
 - **Root Directory:** Reduced from 67 files to 13 essential files
@@ -21,15 +22,38 @@
 
 ---
 
+## 🎯 Current Development: Phase 6.1 Stage 2
+
+### Natural Language Job Search - Frontend Integration
+
+**Status:** 🔄 **READY FOR MANUAL INTEGRATION**
+
+**What's Complete:**
+- ✅ Backend NL processing service
+- ✅ Backend API endpoints (`/api/nl/search/*`)
+- ✅ Frontend NL search component
+- ✅ Frontend service layer
+- ✅ Integration guide created
+
+**What's Needed:**
+- ⏳ Manual integration into JobsPage.tsx (10-15 minutes)
+- ⏳ Local testing with sample queries
+- ⏳ UI/UX refinement based on testing
+
+**Implementation Guide:** See `PHASE-6.1-STAGE-2-IMPLEMENTATION.md`
+
+---
+
 ## 📁 Current Root Directory Structure
 
-**Essential Files Only (13 total):**
+**Essential Files Only (14 total):**
 - `README.md` - Main project documentation
 - `CONTEXT.md` - AI context and project overview
 - `AI-WORKFLOW.md` - AI standard operating procedures
 - `PROJECT-STATUS.md` - This file (current status)
 - `DEVELOPMENT.md` - Development guide
 - `DEPLOYMENT.md` - Deployment guide
+- `PHASE-6.1-STAGE-2-IMPLEMENTATION.md` - Current work guide
 - `LICENSE` - MIT license
 - `.gitignore` - Git ignore rules
 - `.env.production.example` - Production environment template
@@ -40,22 +64,22 @@
 
 ---
 
-## 🎯 Next Steps - Development Focus
+## 🎯 Next Steps
 
-### Phase 6.1 Stage 2: Natural Language Search Frontend
-**Status:** Ready to implement  
-**Backend:** ✅ Complete  
-**Frontend:** ⏳ Pending
+### Immediate (Today)
+1. **Integrate NL Search:** Follow steps in `PHASE-6.1-STAGE-2-IMPLEMENTATION.md`
+2. **Test Locally:** Run app and test natural language queries
+3. **Refine UI:** Adjust based on user experience
 
-**Implementation Tasks:**
-1. Create NL search UI component in frontend
-2. Integrate with existing backend API
-3. Add search results display
-4. Test end-to-end functionality
+### Short Term (This Week)
+- Complete Phase 6.1 Stage 2 testing
+- Document any issues or improvements
+- Consider Phase 6.2 planning (Global job board integration)
 
 ### Future Phases
 - **Phase 6.2:** Global job board integration (planned)
 - **Phase 6.3:** Advanced features (planned)
+- **Phase 7:** Mobile app (planned)
 
 ---
 
@@ -71,6 +95,7 @@
 
 **Root Level (Essential):**
 - Core project docs (README, CONTEXT, AI-WORKFLOW, etc.)
+- Current work guide (PHASE-6.1-STAGE-2-IMPLEMENTATION.md)
 
 **docs/ Directory:**
 - Phase specifications
@@ -82,11 +107,12 @@
 
 ## 🎯 Success Metrics - ACHIEVED! ✅
 
-- ✅ Root directory has <15 files (now 13)
+- ✅ Root directory has <15 files (now 14)
 - ✅ Active branches <5 (now 5)
 - ✅ Clear project status in one file
 - ✅ Know exactly what to work on next
 - ✅ Documentation helps instead of confuses
+- ✅ Clean codebase ready for development
 
 ---
 
@@ -98,4 +124,5 @@ Email: danny@ai-on-auto.com
 ---
 
 **Remember:** Clean repository = Clear mind = Better code  
-**Focus:** Build features, not manage chaos
+**Focus:** Build features, not manage chaos  
+**Current Priority:** Complete Phase 6.1 Stage 2 integration
