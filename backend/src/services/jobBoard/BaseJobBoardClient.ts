@@ -1,5 +1,5 @@
 // Phase 7.1.1: Base Job Board API Client
-import { JobBoardJob, JobBoardSearchParams } from '../types/jobBoard';
+import { JobBoardJob, JobBoardSearchParams } from '../../types/jobBoard';
 
 export interface JobBoardAPIClient {
   /**
