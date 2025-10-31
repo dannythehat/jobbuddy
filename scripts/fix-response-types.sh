@@ -1,25 +1,55 @@
 #!/bin/bash
+
 # Fix Response type conflicts in controllers
-# This script replaces "Response" with "ExpressResponse" in controller files
+# This script updates controllers to use ExpressResponse alias
 
-echo "Fixing Response type conflicts in controllers..."
+echo "🔧 Fixing Response type conflicts in controllers..."
+echo ""
 
-# Fix applicationController.ts
-echo "Fixing applicationController.ts..."
-sed -i.bak 's/import { Request, Response } from '\''express'\'';/import { Request, Response as ExpressResponse } from '\''express'\'';/' backend/src/controllers/applicationController.ts
-sed -i.bak 's/res: Response)/res: ExpressResponse)/g' backend/src/controllers/applicationController.ts
+CONTROLLERS=(
+  "backend/src/controllers/applicationController.ts"
+  "backend/src/controllers/authController.ts"
+  "backend/src/controllers/cvController.ts"
+  "backend/src/controllers/jobController.ts"
+)
 
-# Fix other controllers that might have the same issue
-for file in backend/src/controllers/*.ts; do
-    if grep -q "import { Request, Response } from 'express'" "$file" && grep -q "from '../models/Response'" "$file"; then
-        echo "Fixing $file..."
-        sed -i.bak "s/import { Request, Response } from 'express';/import { Request, Response as ExpressResponse } from 'express';/" "$file"
-        sed -i.bak 's/res: Response)/res: ExpressResponse)/g' "$file"
+FIXED_COUNT=0
+
+for controller in "${CONTROLLERS[@]}"; do
+  if [ -f "$controller" ]; then
+    echo "📝 Processing $controller..."
+    
+    # Check if file needs fixing
+    if grep -q "import { Request, Response" "$controller" && ! grep -q "Response as ExpressResponse" "$controller"; then
+      # Fix the import statement - handle both with and without NextFunction
+      sed -i.bak "s/import { Request, Response }/import { Request, Response as ExpressResponse }/g" "$controller"
+      sed -i.bak "s/import { Request, Response, NextFunction }/import { Request, Response as ExpressResponse, NextFunction }/g" "$controller"
+      
+      # Fix all method signatures
+      sed -i.bak "s/res: Response)/res: ExpressResponse)/g" "$controller"
+      sed -i.bak "s/res: Response,/res: ExpressResponse,/g" "$controller"
+      sed -i.bak "s/res: Response {/res: ExpressResponse {/g" "$controller"
+      
+      # Remove backup files
+      rm -f "${controller}.bak"
+      
+      echo "✅ Fixed $controller"
+      FIXED_COUNT=$((FIXED_COUNT + 1))
+    else
+      echo "⏭️  Already correct or doesn't need fixing"
     fi
+  else
+    echo "⚠️  File not found: $controller"
+  fi
+  echo ""
 done
 
-# Clean up backup files
-find backend/src/controllers -name "*.bak" -delete
-
-echo "✅ Response type conflicts fixed!"
-echo "Run 'npx tsc -p backend/tsconfig.json --noEmit' to verify"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Complete! Fixed $FIXED_COUNT controller(s)"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Next steps:"
+echo "1. cd backend"
+echo "2. npm install"
+echo "3. npx tsc -p tsconfig.json --noEmit"
+echo "4. Should show 0 errors ✨"
