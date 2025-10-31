@@ -2,29 +2,72 @@
 
 This directory contains utility scripts for development, deployment, and maintenance of the JobBuddy application.
 
+## 🚀 Backend Compile Fix Scripts (NEW)
+
+### Quick Start (Recommended)
+Run the complete fix workflow with one command:
+
+```bash
+chmod +x scripts/quick-start-fix.sh
+./scripts/quick-start-fix.sh
+```
+
+This script will:
+1. ✅ Fix Response type conflicts in all controllers
+2. ✅ Install dependencies
+3. ✅ Verify TypeScript compilation (0 errors)
+4. ✅ Start backend and check for runtime errors
+5. ✅ Run basic smoke tests
+6. ✅ Generate logs for verification
+
+### Individual Fix Scripts
+
+#### fix-response-types.sh
+Fixes the Response type naming conflict between Express and the Response model.
+
+```bash
+chmod +x scripts/fix-response-types.sh
+./scripts/fix-response-types.sh
+```
+
+#### quick-start-fix.sh
+Complete automated workflow for the entire backend compile fix process.
+
+```bash
+chmod +x scripts/quick-start-fix.sh
+./scripts/quick-start-fix.sh
+```
+
+**See `PROGRESS.md` for detailed documentation on the backend compile fix.**
+
+---
+
 ## Available Scripts
 
 ### Development Scripts
 - `setup-dev.sh` - Set up development environment
-- `generate-mock-data.js` - Generate mock data for testing
-- `reset-db.js` - Reset database to initial state
-- `seed-db.js` - Seed database with sample data
+- `verify-setup.sh` - Verify development environment setup
+- `init-db.js` - Initialize database
 
 ### Deployment Scripts
-- `deploy-frontend.sh` - Deploy frontend to production
-- `deploy-backend.sh` - Deploy backend to production
-- `setup-ci.sh` - Set up CI/CD pipeline
+- `deploy-cloud-run.sh` - Deploy to Google Cloud Run
+- `setup-gcp.sh` - Set up Google Cloud Platform
+- `fix-gcp-permissions.sh` - Fix GCP permissions
+- `validate-deployment.sh` - Validate deployment
+- `create-secrets.sh` - Create secrets for deployment
+- `fetch-secrets.sh` - Fetch secrets from GCP
 
 ### Database Scripts
-- `backup-db.sh` - Create database backup
-- `migrate-db.js` - Run database migrations
-- `db-status.js` - Check database status
+- `migrate.sh` - Run database migrations
+- `init-db.js` - Initialize database
 
 ### Maintenance Scripts
-- `check-dependencies.js` - Check for outdated dependencies
-- `update-dependencies.sh` - Update project dependencies
-- `lint-fix.sh` - Run linter and fix issues
-- `prune-logs.sh` - Clean up log files
+- `cleanup-repo.sh` - Clean up repository
+- `integrate-nl-search.sh` - Integrate natural language search
+- `setup-phase-7.sh` - Set up phase 7 features
+- `apply-phase-6.1-stage-2.sh` - Apply phase 6.1 stage 2
+- `restore-jobspage.sh` - Restore jobs page
+- `fix-jobspage.py` - Fix jobs page (Python)
 
 ## Usage
 
@@ -42,6 +85,12 @@ For Node.js scripts:
 
 ```bash
 node scripts/script-name.js
+```
+
+For Python scripts:
+
+```bash
+python scripts/script-name.py
 ```
 
 ## Adding New Scripts
