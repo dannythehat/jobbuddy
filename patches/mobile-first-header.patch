@@ -1,0 +1,46 @@
+--- a/frontend/src/components/Layout/Header.tsx
++++ b/frontend/src/components/Layout/Header.tsx
+@@ -77,11 +77,16 @@
+           {/* Mobile menu */}
+           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+             <IconButton
+               size="large"
+-              aria-controls="menu-appbar"
++              aria-label="open navigation menu"
++              aria-controls="menu-appbar"
+               aria-haspopup="true"
+               onClick={handleOpenNavMenu}
+               color="inherit"
++              sx={{
++                '&:hover': {
++                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
++                }
++              }}
+             >
+               <MenuIcon />
+             </IconButton>
+@@ -157,13 +162,17 @@
+             ) : (
+               <>
+                 <Button 
+                   component={RouterLink} 
+                   to="/login" 
+                   color="inherit"
+-                  sx={{ mr: 1 }}
++                  size="small"
++                  sx={{ mr: 1, display: { xs: 'none', sm: 'inline-flex' } }}
+                 >
+                   Login
+                 </Button>
+                 <Button 
+                   component={RouterLink} 
+                   to="/register" 
+                   variant="contained" 
+                   color="secondary"
++                  size="small"
+                 >
+-                  Register
++                  {/* Show "Register" on desktop, "Sign Up" on mobile */}
++                  <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>Register</Box>
++                  <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>Sign Up</Box>
+                 </Button>
