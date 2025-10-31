@@ -6,6 +6,10 @@ import { Application } from './Application';
 import { Certificate } from './Certificate';
 import { Response } from './Response';
 import { Interview } from './Interview';
+import { setupAssociations } from './associations';
+
+// Setup model associations
+setupAssociations();
 
 // Export all models
 export {
@@ -18,6 +22,3 @@ export {
   Response,
   Interview,
 };
-
-// Note: Associations are defined in each model file
-// This index file is for easy importing of all models
