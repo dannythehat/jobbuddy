@@ -51,8 +51,8 @@ h1: {
 }
 ```
 
-### Fix 2: Header Improvements (Patch Available)
-**File:** `patches/mobile-first-header.patch`
+### Fix 2: Header Improvements (PowerShell Script)
+**Script:** `scripts/apply-mobile-fixes.ps1`
 
 **Changes:**
 - ✅ Better hamburger menu visibility
@@ -61,8 +61,15 @@ h1: {
 - ✅ Hide Login button on very small screens
 - ✅ Proper aria labels for accessibility
 
-**Apply with:**
+**Apply with PowerShell:**
+```powershell
+# From project root
+.\scripts\apply-mobile-fixes.ps1
+```
+
+**Or manually apply patch:**
 ```bash
+# For bash users
 chmod +x scripts/apply-mobile-fixes.sh
 ./scripts/apply-mobile-fixes.sh
 ```
@@ -154,7 +161,7 @@ Test on actual phones/tablets if possible.
 ## 📋 Remaining Work
 
 ### High Priority
-- [ ] Apply header patch
+- [ ] Apply header fixes (PowerShell script)
 - [ ] Test on real mobile devices
 - [ ] Fix HomePage responsive spacing
 - [ ] Optimize images for mobile
@@ -174,6 +181,22 @@ Test on actual phones/tablets if possible.
 
 ## 🚀 Quick Fix Commands
 
+### PowerShell (Windows)
+```powershell
+# Apply all mobile fixes
+.\scripts\apply-mobile-fixes.ps1
+
+# Test locally
+cd frontend
+npm start
+# Open http://localhost:3000 in Chrome DevTools mobile view
+
+# Build and test production
+npm run build
+npx serve -s build
+```
+
+### Bash (Mac/Linux)
 ```bash
 # Apply all mobile fixes
 chmod +x scripts/apply-mobile-fixes.sh
@@ -182,7 +205,6 @@ chmod +x scripts/apply-mobile-fixes.sh
 # Test locally
 cd frontend
 npm start
-# Open http://localhost:3000 in Chrome DevTools mobile view
 
 # Build and test production
 npm run build
@@ -213,8 +235,10 @@ serve -s build
 - [Material-UI Responsive Design](https://mui.com/material-ui/customization/breakpoints/)
 - [Mobile-First Design Principles](https://www.uxpin.com/studio/blog/mobile-first-design/)
 - [Touch Target Sizes](https://web.dev/accessible-tap-targets/)
+- [PowerShell Commands Guide](POWERSHELL-COMMANDS.md)
 
 ---
 
 **Last Updated:** October 31, 2025  
-**Status:** Theme fixed ✅, Header patch ready 🔧
+**Status:** Theme fixed ✅, PowerShell script ready 🔧  
+**Note:** PowerShell scripts provided for Windows users
