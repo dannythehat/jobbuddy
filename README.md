@@ -10,7 +10,7 @@
 [![All Bugs Fixed](https://img.shields.io/badge/Bugs-0%20Open-brightgreen)](PROJECT-STATUS.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](backend/package.json)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](docker-compose.prod.yml)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](docker-compose.dev.yml)
 
 </div>
 
@@ -29,41 +29,52 @@ An intelligent job application automation platform that streamlines your entire 
 - 🔒 **Enterprise Security** - Rate limiting, validation, monitoring
 - ⚡ **High Performance** - Redis caching, optimization, scaling
 
-## ⚡ Quick Start
+## ⚡ Quick Start (Docker - Recommended)
+
+**No scripts needed! Just 3 commands:**
+
+```bash
+# 1. Clone and enter directory
+git clone https://github.com/dannythehat/jobbuddy.git
+cd jobbuddy
+
+# 2. Add your OpenAI API key
+echo "OPENAI_API_KEY=sk-your-key-here" > .env
+
+# 3. Start everything
+docker-compose -f docker-compose.dev.yml up
+```
+
+**That's it!** 🎉
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
+
+📖 **[Full Quick Start Guide](QUICKSTART.md)** | 🔧 **[Troubleshooting](TROUBLESHOOTING.md)**
+
+## 🛠️ Manual Setup (Without Docker)
 
 ### Prerequisites
 - Node.js 18+
 - PostgreSQL
-- Redis
+- Redis (optional)
 - OpenAI API key
 
-### Development Setup
+### Setup Steps
 ```bash
-git clone https://github.com/dannythehat/jobbuddy.git
-cd jobbuddy
-
-# Configure environment variables
+# Configure environment
 cp backend/.env.example backend/.env
-# Edit backend/.env with your database and API credentials
+# Edit backend/.env with your credentials
 
-# Initialize database
-node scripts/init-db.js
+# Start backend
+cd backend
+npm install
+npm run dev
 
-# Start development servers
-# Terminal 1 - Backend
-cd backend && npm run dev
-
-# Terminal 2 - Frontend  
-cd frontend && npm start
+# Start frontend (new terminal)
+cd frontend
+npm install
+npm start
 ```
-
-### Production Deployment
-```bash
-# Using Docker Compose (Recommended)
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-📖 **[Development Guide](DEVELOPMENT.md)** | 🚀 **[Deployment Guide](DEPLOYMENT.md)** | 📊 **[Project Status](PROJECT-STATUS.md)** | 🤖 **[AI Context](CONTEXT.md)**
 
 ## 🎯 Current Status
 
@@ -83,8 +94,6 @@ docker-compose -f docker-compose.prod.yml up -d
 
 **Latest Achievement:** Natural language backend fully operational with AI-powered query parsing! 🎉
 
-See [PROJECT-STATUS.md](PROJECT-STATUS.md) for detailed current status and next steps.
-
 ## 🛠️ Tech Stack
 
 **Frontend:** React, TypeScript, Material UI, Recharts  
@@ -98,56 +107,38 @@ See [PROJECT-STATUS.md](PROJECT-STATUS.md) for detailed current status and next 
 
 - **Security Hardening** - Rate limiting, XSS protection, input validation
 - **Performance Optimization** - Redis caching, query optimization, compression
-- **Container Deployment** - Docker, Docker Compose, health checks
-- **Monitoring & Alerting** - Prometheus, Grafana, logging systems
-- **Scalable Architecture** - Load balancing, caching, database optimization
+- **Monitoring** - Health checks, metrics, logging
+- **Scalability** - Docker orchestration, load balancing ready
+- **CI/CD** - Automated testing and deployment pipelines
 
 ## 📚 Documentation
 
-### Essential Guides
-- 📖 **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development setup & workflow
-- 🚀 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment guide
-- 📊 **[PROJECT-STATUS.md](PROJECT-STATUS.md)** - Current status & roadmap
-- 🤖 **[CONTEXT.md](CONTEXT.md)** - AI context & project overview
-- 🔧 **[AI-WORKFLOW.md](AI-WORKFLOW.md)** - AI assistant standard procedures
+- 📖 **[Quick Start Guide](QUICKSTART.md)** - Get running in 3 commands
+- 🔧 **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues & solutions
+- 🚀 **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment
+- 🏗️ **[Architecture](docs/architecture.md)** - System design
+- 🔌 **[API Documentation](docs/api.md)** - API reference
+- ✨ **[Features](docs/features.md)** - Feature overview
+- 🤝 **[Contributing](docs/contributing.md)** - Contribution guidelines
 
-### Additional Documentation
-Detailed documentation is available in the `docs/` directory (archived historical docs in `docs/archive/`).
+## 🆘 Need Help?
 
-## 🚀 Deployment Options
+1. Check **[QUICKSTART.md](QUICKSTART.md)** for setup instructions
+2. Check **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** for common issues
+3. Open an issue on GitHub with your error details
 
-JobBuddi is production-ready with multiple deployment options:
+## 📝 License
 
-- **Docker Compose** - Complete stack with one command
-- **Kubernetes** - Scalable container orchestration  
-- **Traditional** - Direct server deployment
-- **Cloud** - AWS, GCP, Azure compatible
+MIT License - see [LICENSE](LICENSE) file for details
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+## 🙏 Acknowledgments
 
-## 🤝 Contributing
-
-We welcome contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-See [DEVELOPMENT.md](DEVELOPMENT.md) for development guidelines.
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 📞 Contact
-
-**Danny Allan** - danny@ai-on-auto.com  
-**Project:** [github.com/dannythehat/jobbuddy](https://github.com/dannythehat/jobbuddy)
+Built with ❤️ using modern web technologies and AI assistance.
 
 ---
 
 <div align="center">
-<em>🎉 Production Ready - Phase 6.1 Stage 1 Complete | Frontend UI Next 🔍</em>
+
+**[⭐ Star this repo](https://github.com/dannythehat/jobbuddy)** if you find it helpful!
+
 </div>
