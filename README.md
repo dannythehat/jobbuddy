@@ -29,7 +29,28 @@ An intelligent job application automation platform that streamlines your entire 
 - 🔒 **Enterprise Security** - Rate limiting, validation, monitoring
 - ⚡ **High Performance** - Redis caching, optimization, scaling
 
-## ⚡ Quick Start (Docker - Recommended)
+## ⚡ Quick Start
+
+### 🌐 **Option 1: GitHub Codespaces (Easiest - No Install!)**
+
+Run entirely in your browser with zero setup:
+
+1. Click the green **"Code"** button above
+2. Select **"Codespaces"** tab
+3. Click **"Create codespace on main"**
+4. Wait 2-3 minutes for setup
+
+Then in the terminal:
+```bash
+echo "OPENAI_API_KEY=sk-your-key-here" > .env
+docker-compose -f docker-compose.dev.yml up
+```
+
+📖 **[Codespaces Guide](CODESPACES.md)** - Full instructions
+
+---
+
+### 🐳 **Option 2: Local Docker (Recommended)**
 
 **No scripts needed! Just 3 commands:**
 
@@ -49,17 +70,14 @@ docker-compose -f docker-compose.dev.yml up
 - Frontend: http://localhost:3000
 - Backend: http://localhost:3001
 
-📖 **[Full Quick Start Guide](QUICKSTART.md)** | 🔧 **[Troubleshooting](TROUBLESHOOTING.md)**
+📖 **[Quick Start Guide](QUICKSTART.md)** | 🔧 **[Troubleshooting](TROUBLESHOOTING.md)**
 
-## 🛠️ Manual Setup (Without Docker)
+---
 
-### Prerequisites
-- Node.js 18+
-- PostgreSQL
-- Redis (optional)
-- OpenAI API key
+### 🛠️ **Option 3: Manual Setup (Without Docker)**
 
-### Setup Steps
+**Prerequisites:** Node.js 18+, PostgreSQL, Redis (optional), OpenAI API key
+
 ```bash
 # Configure environment
 cp backend/.env.example backend/.env
@@ -113,8 +131,11 @@ npm start
 
 ## 📚 Documentation
 
+- 🌐 **[Codespaces Guide](CODESPACES.md)** - Run in browser (no install!)
 - 📖 **[Quick Start Guide](QUICKSTART.md)** - Get running in 3 commands
+- ✅ **[Setup Checklist](SETUP-CHECKLIST.md)** - Step-by-step guide
 - 🔧 **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues & solutions
+- 📊 **[Current Status](CURRENT-STATUS.md)** - Project status & roadmap
 - 🚀 **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment
 - 🏗️ **[Architecture](docs/architecture.md)** - System design
 - 🔌 **[API Documentation](docs/api.md)** - API reference
@@ -123,9 +144,10 @@ npm start
 
 ## 🆘 Need Help?
 
-1. Check **[QUICKSTART.md](QUICKSTART.md)** for setup instructions
-2. Check **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** for common issues
-3. Open an issue on GitHub with your error details
+1. Try **[Codespaces](CODESPACES.md)** for zero-setup development
+2. Check **[QUICKSTART.md](QUICKSTART.md)** for setup instructions
+3. Check **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** for common issues
+4. Open an issue on GitHub with your error details
 
 ## 📝 License
 
