@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    container_name: jobbuddy-postgres
+    environment:
+      POSTGRES_DB: jobbuddy
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jobbuddy_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (Optional - for caching)
+  redis:
+    image: redis:7-alpine
+    container_name: jobbuddy-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: jobbuddy-backend
+    environment:
+      # Server
+      PORT: 3001
+      NODE_ENV: development
+      
+      # Database
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: jobbuddy
+      DB_USER: postgres
+      DB_PASSWORD: jobbuddy_dev_password
+      
+      # JWT (Change these!)
+      JWT_SECRET: dev_jwt_secret_change_in_production_min_32_characters
+      JWT_EXPIRES_IN: 90d
+      
+      # OpenAI (Add your key here)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-your-key-here}
+      
+      # Encryption (Change this!)
+      ENCRYPTION_KEY: dev_encryption_key_change_in_production_64_chars_hex
+      
+      # Frontend URL
+      FRONTEND_URL: http://localhost:3000
+      
+      # Redis
+      REDIS_URL: redis://redis:6379
+      
+      # Logging
+      LOG_LEVEL: debug
+      
+      # Cloud Run (disabled for local)
+      CLOUD_RUN: false
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: npm run dev
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: jobbuddy-frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:3001/api
+      CHOKIDAR_USEPOLLING: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  default:
+    name: jobbuddy-network
